@@ -1,0 +1,26 @@
+html {
+	font-size: 14px;
+}
+
+body {
+	font-family: 'Noto Sans JP', sans-serif;
+}
+
+h1 {
+	font-size: 1.5rem;
+}
+
+.nagoyameshi-main-color {
+	background-color: #E0C1A1;
+}
+.nagoyameshi-base-color {
+	background-color: #FDFBF5;
+}
+
+.nagoyameshi-dropdown-item:active {
+	background-color: #5196a6;
+}
+
+.nagoyameshi-btn {
+	color: #8A5B58;
+}
