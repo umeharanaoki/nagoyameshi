@@ -54,5 +54,44 @@ CREATE TABLE IF NOT EXISTS restaurants(
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,    
     FOREIGN KEY (category_id) REFERENCES categories (id)
-);   
+);
+
+CREATE TABLE IF NOT EXISTS reviews(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	restaurant_id INT NOT NULL,
+	user_id INT NOT NULL,
+	title VARCHAR(50) NOT NULL,
+	image_name VARCHAR(255),
+	evaluation VARCHAR(50) NOT NULL,
+    comment VARCHAR(255) NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,    
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+); 
+
+CREATE TABLE IF NOT EXISTS reservations(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	restaurant_id INT NOT NULL,
+	user_id INT NOT NULL,
+	image_name VARCHAR(255),
+	visiting_date DATE NOT NULL,
+	visiting_time TIME NOT NULL,
+	number_of_people INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+); 
+
+CREATE TABLE IF NOT EXISTS favorites(
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	restaurant_id INT NOT NULL,
+	user_id INT NOT NULL,
+	status INT NOT NULL,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,    
+    FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
+    FOREIGN KEY (user_id) REFERENCES users (id)
+); 
+
 	

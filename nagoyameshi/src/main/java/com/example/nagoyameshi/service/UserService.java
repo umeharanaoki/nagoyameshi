@@ -7,6 +7,7 @@ import org.springframework.transaction.annotation.Transactional;
 import com.example.nagoyameshi.entity.Role;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.SignupForm;
+import com.example.nagoyameshi.form.UserEditForm;
 import com.example.nagoyameshi.repository.RoleRepository;
 import com.example.nagoyameshi.repository.UserRepository;
 
@@ -27,6 +28,7 @@ public class UserService {
     public User create(SignupForm signupForm) {
         User user = new User();
         Role role = roleRepository.findByName("ROLE_GENERAL_FREE");
+        String birthday = signupForm.getBirthday().equals("") ? null : signupForm.getBirthday();
         
         user.setName(signupForm.getName());
         user.setFurigana(signupForm.getFurigana());
@@ -34,7 +36,7 @@ public class UserService {
         user.setAddress(signupForm.getAddress());
         user.setPhoneNumber(signupForm.getPhoneNumber());
         //　birthdayはnullになる可能性あり→売上処理のとき注意
-        user.setBirthday(signupForm.getBirthday());
+        user.setBirthday(birthday);
         user.setEmail(signupForm.getEmail());
         user.setPassword(passwordEncoder.encode(signupForm.getPassword()));
         user.setRole(role);
@@ -42,6 +44,20 @@ public class UserService {
         
         return userRepository.save(user);
     }    
+    
+    @Transactional
+    public void update(UserEditForm userEditForm) {
+    	User user = userRepository.getReferenceById(userEditForm.getId());
+    	
+    	user.setName(userEditForm.getName());
+    	user.setFurigana(userEditForm.getFurigana());
+    	user.setPostalCode(userEditForm.getPostalCode());
+        user.setAddress(userEditForm.getAddress());
+        user.setPhoneNumber(userEditForm.getPhoneNumber());
+        user.setEmail(userEditForm.getEmail());      
+        
+        userRepository.save(user);
+    }
     
     // メールアドレスが登録済みかどうかをチェックする
     public boolean isEmailRegistered(String email) {
@@ -59,5 +75,11 @@ public class UserService {
     public void enableUser(User user) {
         user.setEnabled(true); 
         userRepository.save(user);
-    }  
+    }
+    
+    // メールアドレスが変更されたかどうか確認
+    public boolean isEmailChanged(UserEditForm userEditForm) {
+    	User currentUser = userRepository.getReferenceById(userEditForm.getId());
+    	return !userEditForm.getEmail().equals(currentUser.getEmail());
+    }
 }

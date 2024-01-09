@@ -22,5 +22,35 @@ h1 {
 }
 
 .nagoyameshi-btn {
-	color: #8A5B58;
+	background-color: #8A5B58;
 }
+
+.nagoyameshi-link-danger {
+	color: #f2594b;
+}
+
+.nagoyameshi-link-danger:hover {
+	color: #a63c3c;
+}
+
+.nagoyameshi-btn-danger {
+	background-color: #f2594b !important;
+	transition: 0.1s;
+}
+
+.nagoyameshi-btn-danger:hover {
+   opacity: 0.8;   
+ }
+ 
+.nagoyameshi-modal-close {
+	color: white;
+}
+
+/*#category-conteiner {*/
+/*	display: flex;*/
+/*width: 1255.918px;*/
+/*align-items: flex-start;*/
+/*align-content: flex-start;*/
+/*gap: 8px;*/
+/*flex-wrap: wrap;*/
+/*}*/
