@@ -13,28 +13,22 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.repository.UserRepository;
+import com.example.nagoyameshi.service.UserService;
 
 @Controller
 @RequestMapping("/admin/users")
 public class AdminUserController {
 	private final UserRepository userRepository;
+	private final UserService userService;
 	
-	public AdminUserController(UserRepository userRepository) {
+	public AdminUserController(UserRepository userRepository, UserService userService) {
 		this.userRepository = userRepository;
+		this.userService = userService;
 	}
 	
 	@GetMapping
 	public String index(Model model, @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable, @RequestParam(name = "keyword", required = false) String keyword) {
-		Page<User> userPage;
-		
-		// keyword（検索ワード）があるとき
-		if (keyword != null && !keyword.isEmpty()) {
-				// keywordをもとに作成した独自メソッドで部分検索を行う
-		    userPage = userRepository.findByNameLike("%" + keyword + "%", pageable);                
-		} else {
-				// それ以外（keywordがない）ときはfindAllメソッドですべて表示する
-		    userPage = userRepository.findAll(pageable);
-		}
+		Page<User> userPage = userService.findAdminUsers(keyword, pageable);
 		
 		model.addAttribute("userPage", userPage);
 		model.addAttribute("keyword", keyword);

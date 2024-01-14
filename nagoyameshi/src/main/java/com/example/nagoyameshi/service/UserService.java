@@ -1,5 +1,12 @@
 package com.example.nagoyameshi.service;
 
+import static com.example.nagoyameshi.specification.UserSpecifications.*;
+
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort.Direction;
+import org.springframework.data.jpa.domain.Specification;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -58,6 +65,19 @@ public class UserService {
         
         userRepository.save(user);
     }
+    
+    // 管理者用一覧の検索機能
+    // or検索なので引数は全てkeyword
+    public Page<User> findAdminUsers(String keyword, @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
+		Specification<User> spec = Specification
+				 .where(nameContains(keyword))
+				 .or(furiganaContains(keyword))
+				 .or(emailContains(keyword))
+				 .or(phoneNumberContains(keyword))
+		.or(postalCodeContains(keyword));
+	    Page<User> adminUserPage = userRepository.findAll(spec, pageable);
+	    return adminUserPage;
+	}
     
     // メールアドレスが登録済みかどうかをチェックする
     public boolean isEmailRegistered(String email) {

@@ -10,6 +10,52 @@ h1 {
 	font-size: 1.5rem;
 }
 
+a {
+  color: #8A5B58;
+  text-decoration: none !important;
+}
+
+a:hover {
+    color: rgb(128, 64, 64);
+}
+
+footer {
+  width: 100%;
+  height: 60px;
+  position: absolute;
+  bottom: 0;    
+  background-color: #E0C1A1;
+}
+
+.nagoyameshi-wrapper {
+	min-height: 100vh;
+	position: relative;
+	padding-bottom: 60px;
+	box-sizing: border-box;
+	background-color: #FDFBF5;
+}
+
+.nagoyameshi-navbar {
+	min-height: 60px;
+}
+
+.nagoyameshi-logo {
+	height: 60px;
+}
+
+.nagoyameshi-page-link {
+  color: #8A5B58;
+}
+
+.nagoyameshi-page-link:hover {
+  color: rgb(128, 64, 64);
+}
+
+.nagoyameshi-active {
+  background-color: #8A5B58 !important;
+  border-color: #8A5B58 !important;
+}
+
 .nagoyameshi-main-color {
 	background-color: #E0C1A1;
 }

@@ -5,6 +5,7 @@ import java.util.List;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.web.PageableDefault;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -13,9 +14,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
 import com.example.nagoyameshi.entity.Category;
+import com.example.nagoyameshi.entity.Favorite;
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.FavoriteRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
+import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.RestaurantService;
 
 @Controller
@@ -24,11 +29,13 @@ public class RestaurantController {
 	private final RestaurantRepository restaurantRepository;
 	private final CategoryRepository categoryRepository;
 	private final RestaurantService restaurantService;
+	private final FavoriteRepository favoriteRepository;
 	
-	RestaurantController(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, RestaurantService restaurantService) {
+	RestaurantController(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, RestaurantService restaurantService, FavoriteRepository favoriteRepository) {
 		this.restaurantRepository = restaurantRepository;
 		this.categoryRepository = categoryRepository;
 		this.restaurantService = restaurantService;
+		this.favoriteRepository = favoriteRepository;
 	}
 	
 	@GetMapping
@@ -52,12 +59,18 @@ public class RestaurantController {
 	}
 	
 	@GetMapping("/{restaurant_id}")
-	public String show(@PathVariable(name = "restaurant_id") Integer restaurantId, Model model) {
+	public String show(@PathVariable(name = "restaurant_id") Integer restaurantId,
+					   @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+					   Model model) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
 		Category category = categoryRepository.getReferenceById(restaurant.getCategory().getId());
+		User user = userDetailsImpl.getUser();
+		Favorite favorite = favoriteRepository.findByUserAndRestaurant(user, restaurant);
 		
 		model.addAttribute("restaurant", restaurant);
 		model.addAttribute("category", category);
+		model.addAttribute("user", user);
+		model.addAttribute("favorite", favorite);
 		
 		return "restaurants/show";
 	}

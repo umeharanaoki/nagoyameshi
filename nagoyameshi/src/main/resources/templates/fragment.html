@@ -25,16 +25,18 @@
 	<body>
         <!-- ヘッダーの部品化 -->
         <div th:fragment="header" th:remove="tag">
-            <nav class="navbar navbar-expand-md nagoyameshi-main-color">
+            <nav class="navbar navbar-expand-md nagoyameshi-main-color nagoyameshi-navbar">
                 <div class="container">
+					<!-- ロゴ -->
                     <a class="navbar-brand" th:href="@{/}">                        
-                        <img th:src="@{/images/logo.png}" alt="NAGOYAMESHI">
+                        <img th:src="@{/images/logo.png}" class="nagoyameshi-logo" alt="NAGOYAMESHI">
                     </a>  
                     
+                    <!-- レスポンシブ時のハンバーガーメニューを定義 -->
                     <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
                         <span class="navbar-toggler-icon"></span>
                     </button>
-                    
+                    <!-- レスポンシブ時に非表示になるように上で'data-bs-target'に指定したidを設定 -->
                     <div class="collapse navbar-collapse" id="navbarSupportedContent">                                    
                         <ul class="navbar-nav ms-auto">    
                             <!-- 未ログインであれば表示する -->
@@ -122,6 +124,7 @@
         <div th:fragment="scripts" th:remove="tag">
             <!-- Bootstrap -->
             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-kenU1KFdBIe4zVF0s0G1M5b4hcpxyD9F7jL+jjXkk+Q2h455rYXK/7HAuoJl+0I4" crossorigin="anonymous"></script>
+            <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
         </div>
     </body>
 </html>

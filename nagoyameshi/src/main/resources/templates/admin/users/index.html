@@ -15,6 +15,15 @@
 					
 					
 					<h1 class="text-center">管理者用ユーザー一覧</h1>
+					
+                    <div class="d-flex justify-content-start align-items-start flex-wrap">
+                        <form method="get" th:action="@{/admin/users}" class="mb-3">
+                            <div class="input-group">
+                                <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="氏名, フリガナ, メールアドレス, 電話番号, 郵便番号">
+                                <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button> 
+                            </div>               
+                        </form>      
+                    </div>
                     
                     <table class="table">
                         <thead>

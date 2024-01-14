@@ -146,6 +146,16 @@
                                         <span th:text="${restaurant.getKeyword()}"></span>
                                     </div>
                                 </div>
+                                <!-- お気に入り登録者数 -->
+                                <div class="row pb-2 mb-2 border-bottom">
+                                    <div class="col-4">
+                                        <span class="fw-bold">お気に入り登録者数</span>
+                                    </div>
+             
+                                    <div class="col">
+                                        <span th:text="${favoriteUsers + '人'}"></span>
+                                    </div>
+                                </div>
                             </div>                                                  
                  
                         </div>

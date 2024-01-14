@@ -24,6 +24,7 @@ import com.example.nagoyameshi.entity.Restaurant;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
 import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.FavoriteRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 import com.example.nagoyameshi.service.RestaurantService;
 
@@ -33,11 +34,13 @@ public class AdminRestaurantController {
 	private final RestaurantRepository restaurantRepository;
 	private final CategoryRepository categoryRepository;
 	private final RestaurantService restaurantService;
+	private final FavoriteRepository favoriteRepository;
 	
-	AdminRestaurantController(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, RestaurantService restaurantService) {
+	AdminRestaurantController(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, RestaurantService restaurantService, FavoriteRepository favoriteRepository) {
 		this.restaurantRepository = restaurantRepository;
 		this.categoryRepository = categoryRepository;
 		this.restaurantService = restaurantService;
+		this.favoriteRepository = favoriteRepository;
 	}
 	
 	@GetMapping
@@ -54,9 +57,11 @@ public class AdminRestaurantController {
 	public String show(Model model, @PathVariable(name = "restaurant_id") Integer restaurantId) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
 		List<Category> category = categoryRepository.findAll();
+		Integer favoriteUsers = favoriteRepository.countFavoriteUsersByRestaurantId(restaurantId);
 		
 		model.addAttribute("restaurant", restaurant);
 		model.addAttribute("category", category);
+		model.addAttribute("favoriteUsers", favoriteUsers);
 		
 		return "admin/restaurants/show";
 	}
