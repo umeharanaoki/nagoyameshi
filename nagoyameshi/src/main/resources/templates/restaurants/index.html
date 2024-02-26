@@ -4,7 +4,7 @@
 		<div th:replace="~{fragment :: meta}"></div>
 		
 		<div th:replace="~{fragment :: styles}"></div>
-		
+
 		<title>店舗一覧</title>
 	</head>
 	<body>
@@ -105,12 +105,17 @@
   
                                                     <hr class="mb-3">
                                                     
-                                                    <p class="card-text mb-2">
+                                                    <p class="card-text mb-0">
                                                         <span th:text="${restaurant.getExplanation()}"></span>
-                                                    </p>                                                    
-                                                    
+                                                    </p>           
+                                                                                             
+                                                    <!-- reviewの点数 -->
                                                     <p class="card-text mb-2">
-                                                        <span>★★5.00</span>                                                   
+														<span class="rate-wrap">
+															<!-- インラインスタイルで直接評価点に基づいてスタイルを適用 -->
+														    <span class="rate" th:style="'--score: ' + ${averageEvaluations[restaurant.id]}"></span>
+    														<span class="num" th:text="${averageEvaluations[restaurant.id]}"></span>
+														</span>
                                                     </p>   
                                                                                                                                                                                                                                    
                                                     <p class="card-text mb-2">
@@ -127,6 +132,7 @@
                                 </a>            
                             </div>                 
 						</div>
+						<span class="rate-wrap">総合評価<span class="rate" style ="--score: {{ 3.7 }}"></span><span class="num">3.7</span></span>
 						<!-- ページネーション -->
 	                    <div th:if="${restaurantPage.getTotalPages() > 1}" class="d-flex justify-content-center">
 	                        <nav aria-label="店舗一覧ページ">

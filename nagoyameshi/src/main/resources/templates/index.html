@@ -5,28 +5,63 @@
 		
 		<div th:replace="~{fragment :: styles}"></div>
 		
-		<title>トップページ</title>
+		<script src="https://kit.fontawesome.com/509ea7593e.js" crossorigin="anonymous"></script>
+		    	
+		<title>NAGOYAMESHI</title>
 	</head>
 	<body>
-		<div class="nagoyameshi-base-color">
+		<div class="nagoyameshi-wrapper">
 			<div th:replace="~{fragment :: header}"></div>
-			
+			<!-- 背景をカルーセルに -->
+			<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-interval="5000">
+				<div class="--bs-primary w-50 h-50"></div>
+				<div class="carousel-inner bgCarousel">
+    				<div class="carousel-item bgCarousel__item active">
+						<!-- カルーセル上にキャッチコピーと検索ボックスを追加 -->
+						<div class="d-flex align-items-center ms-2">
+							<div class="row">
+								<div class="col-6">
+									<img class="nagoyameshi-top-image" th:src="@{/images/nagoyameshiTop.png}" alt="ナゴヤ飯">
+									<p class="bold">名古屋のB級グルメに特化したグルメサイト</p>
+								</div>
+								<!-- 検索ボックス -->
+								<div class="col-6">
+									<form method="get" th:action="@{/restaurants}" class="w-100">
+										<div class="input-group">
+											<input class="top-search" type="text" name="keyword" placeholder="キーワード[店名・焼肉・デート]">
+											<button type="submit" class="btn btn-search"></button>
+										</div>
+									</form>
+								</div>
+							</div>
+							
+							
+						</div>
+					</div>
+<!--    				<div class="carousel-item bgCarousel__item"></div>-->
+<!--    				<div class="carousel-item bgCarousel__item"></div>-->
+				</div>
+			</div>
 			<main>
-				<div class="container">
-					<div th:if="${param.loggedIn}" class="alert alert-info">
-	                	ログインしました。
-	                </div>  
-	                     
-	                <div th:if="${param.loggedOut}" class="alert alert-info">
-	                    ログアウトしました。
-	                </div>
-	                
-					<div th:if="${successMessage}" class="alert alert-info">
-                         <span th:text="${successMessage}"></span>
-                    </div>    	
-					
-					<h1 class="text-center">トップページ</h1>
-					
+				<div class="container pt-4 pb-5 nagoyameshi-container">
+					<div class="row justify-content-center">
+						<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">
+							<div th:if="${param.loggedIn}" class="alert alert-info">
+			                	ログインしました。
+			                </div>  
+			                     
+			                <div th:if="${param.loggedOut}" class="alert alert-info">
+			                    ログアウトしました。
+			                </div>
+			                
+							<div th:if="${successMessage}" class="alert alert-info">
+		                         <span th:text="${successMessage}"></span>
+		                    </div>
+		                    
+		                    <!-- 評価が高い店 -->
+		                    
+						</div>
+					</div>
 				</div>
 			</main>
 			<div th:replace="~{fragment :: footer}"></div>	

@@ -55,9 +55,10 @@ public class RestaurantSpecifications {
 	}
 	// キーワードで部分検索
 	public static Specification<Restaurant> keywordContains(String keyword) {
-		return StringUtils.hasLength(keyword) ? (root, query, cb) -> {			
+		return StringUtils.hasLength(keyword) ? (root, query, cb) -> {
 			return cb.like(root.get("keyword"), "%" + keyword + "%");
 		} : null;
     }
+	// レビューの評価順
 
 }

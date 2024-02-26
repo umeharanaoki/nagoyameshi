@@ -75,7 +75,7 @@ public class RestaurantService {
             String hashedImageName = generateNewFileName(imageName);
             Path filePath = Paths.get("src/main/resources/static/storage/" + hashedImageName);
             copyImageFile(imageFile, filePath);
-            restaurant.setImageName(hashedImageName);
+            restaurant.setImageName(hashedImageName);   
         }
         
         restaurant.setName(restaurantEditForm.getName());
@@ -107,7 +107,7 @@ public class RestaurantService {
 	}
 	
 	// 一般用店舗一覧ページのための検索機能
-	public Page<Restaurant> findRestaurants(String keyword, Integer minBudget, Integer maxBudget, Category category, @PageableDefault(page = 0, size = 10, sort = "id", direction = Direction.ASC) Pageable pageable) {
+	public Page<Restaurant> findRestaurants(String keyword, Integer minBudget, Integer maxBudget, Category category, @PageableDefault(page = 0, size = 10) Pageable pageable) {
 		Specification<Restaurant> spec = Specification
 				// 店名とキーワードは同じ検索窓なので引数を同じにしている
 				.where(nameContains(keyword))
@@ -115,6 +115,19 @@ public class RestaurantService {
 				.and(minBudgetGreaterThanEqual(minBudget))
 				.and(maxBudgetLessThanEqual(maxBudget))
 				.and(categoryEqual(category));
+		
+		
+		// Sortの設定
+//		Object sortOption;
+//		Sort sort = pageable.getSort().isSorted()
+//		        ? pageable.getSort()
+//		        : (sortOption.equals("score")
+//		            ? Sort.by(Sort.Direction.DESC, "reviews.evaluation")
+//		            : Sort.by(Sort.Direction.DESC, "updatedAt"));
+		
+        // PageableにSort情報を追加
+//        pageable = PageRequest.of(0, 10, sort);
+        
 	    Page<Restaurant> restaurantPage = restaurantRepository.findAll(spec, pageable);
 	    return restaurantPage;
 	}
@@ -135,6 +148,6 @@ public class RestaurantService {
             Files.copy(imageFile.getInputStream(), filePath);
         } catch (IOException e) {
             e.printStackTrace();
-        }          
+        }           
     }
 }
