@@ -50,7 +50,7 @@ public class RestaurantSpecifications {
 	// カテゴリ検索
 	public static Specification<Restaurant> categoryEqual(Category category) {
 		return ObjectUtils.isEmpty(category) ? null : (root, query, cb) -> {
-			return cb.equal(root.get("category"), category.getId());
+			return cb.equal(root.get("category").get("id"), category.getId());
 		};
 	}
 	// キーワードで部分検索
@@ -59,6 +59,4 @@ public class RestaurantSpecifications {
 			return cb.like(root.get("keyword"), "%" + keyword + "%");
 		} : null;
     }
-	// レビューの評価順
-
 }

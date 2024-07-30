@@ -15,7 +15,7 @@ public class UserSpecifications {
 	//フリガナで部分検索
 	public static Specification<User> furiganaContains(String furigana) {
 		return StringUtils.hasLength(furigana) ? (root, query, cb) -> {
-			return cb.like(root.get("postalCode"), "%" + furigana + "%");
+			return cb.like(root.get("furigana"), "%" + furigana + "%");
 		} : null;
 	}
 	// メールアドレスで部分検索

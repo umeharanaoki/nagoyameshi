@@ -5,65 +5,112 @@
 		
 		<div th:replace="~{fragment :: styles}"></div>
 		
-		<script src="https://kit.fontawesome.com/509ea7593e.js" crossorigin="anonymous"></script>
+		<!-- fontアイコン用CDN -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" rel="stylesheet">
+		
 		    	
-		<title>NAGOYAMESHI</title>
+		<title>トップページ</title>
 	</head>
 	<body>
-		<div class="nagoyameshi-wrapper">
-			<div th:replace="~{fragment :: header}"></div>
-			<!-- 背景をカルーセルに -->
-			<div id="carouselExampleSlidesOnly" class="carousel slide" data-bs-ride="carousel" data-interval="5000">
-				<div class="--bs-primary w-50 h-50"></div>
-				<div class="carousel-inner bgCarousel">
-    				<div class="carousel-item bgCarousel__item active">
-						<!-- カルーセル上にキャッチコピーと検索ボックスを追加 -->
-						<div class="d-flex align-items-center ms-2">
-							<div class="row">
-								<div class="col-6">
-									<img class="nagoyameshi-top-image" th:src="@{/images/nagoyameshiTop.png}" alt="ナゴヤ飯">
-									<p class="bold">名古屋のB級グルメに特化したグルメサイト</p>
-								</div>
-								<!-- 検索ボックス -->
-								<div class="col-6">
-									<form method="get" th:action="@{/restaurants}" class="w-100">
-										<div class="input-group">
-											<input class="top-search" type="text" name="keyword" placeholder="キーワード[店名・焼肉・デート]">
-											<button type="submit" class="btn btn-search"></button>
-										</div>
-									</form>
-								</div>
+		<div th:replace="~{fragment :: header}"></div>
+		<!-- 背景をカルーセルに -->
+		<div id="carouselExampleSlidesOnly" class="carousel nagoyameshi-carousel-area slide" data-bs-ride="carousel" data-bs-interval="5000">
+			<div class="carousel-inner bgCarousel">
+				<!-- カルーセルの各パターン -->
+	    		<div class="carousel-item bgCarousel__item active" style="background-image: url('/images/top01.jpg');"></div>
+	    		<div class="carousel-item bgCarousel__item" style="background-image: url('/images/top02.jpg');"></div>
+	    		<div class="carousel-item bgCarousel__item" style="background-image: url('/images/top03.jpg');"></div>
+	    		
+				<!-- 固定表示されるコンテンツ -->
+				<div class="nagoyameshi-wrapper">
+					<div class="container">
+						<div class="row">
+							<!-- カルーセル上の左半分 -->
+							<div class="col-8 nagoyameshi-top-left">
+								<img class="nagoyameshi-top-image" th:src="@{/images/nagoyameshiTop.png}" alt="ナゴヤ飯">
+								<h3 class="nagoyameshi-sub-copy">名古屋のB級グルメに特化したグルメサイト</h3>
 							</div>
-							
-							
+							<!-- カルーセル上の右半分 -->
+							<!-- 検索ボックス -->
+							<div class="col-3 nagoyameshi-top-right">
+								<form method="get" th:action="@{/restaurants}" class="top-search-form w-100">
+									<button type="submit" class="top-search-btn "><i class="fa-solid fa-magnifying-glass"></i></button>
+									<input class="top-search-input" type="text" name="keyword" placeholder="キーワード (店名・焼肉・デート)">
+								</form>
+							</div>
 						</div>
 					</div>
-<!--    				<div class="carousel-item bgCarousel__item"></div>-->
-<!--    				<div class="carousel-item bgCarousel__item"></div>-->
 				</div>
 			</div>
-			<main>
-				<div class="container pt-4 pb-5 nagoyameshi-container">
-					<div class="row justify-content-center">
-						<div class="col-xl-3 col-lg-4 col-md-5 col-sm-7">
-							<div th:if="${param.loggedIn}" class="alert alert-info">
-			                	ログインしました。
-			                </div>  
-			                     
-			                <div th:if="${param.loggedOut}" class="alert alert-info">
-			                    ログアウトしました。
-			                </div>
+		</div>
+		<!-- メインコンテンツ -->
+		<div class="nagoyameshi-wrapper nagoyameshi-top-mainarea">
+			<div class="container pt-4 pb-5 nagoyameshi-container">
+				<div class="row">
+					<div class="nagoyameshi-alert-box">
+						<!-- ログイン状態が変わった時のメッセージ -->
+						<div th:if="${param.loggedIn}" class="alert alert-info">ログインしました。</div>  
+				        <div th:if="${param.loggedOut}" class="alert alert-info">ログアウトしました。</div>
+			        </div>
+			        <!-- 認証用メール送信メッセージ -->
+			        <div th:if="${successMessage}" class="alert alert-info">
+				    	<span th:text="${successMessage}"></span>
+				    </div>
 			                
-							<div th:if="${successMessage}" class="alert alert-info">
-		                         <span th:text="${successMessage}"></span>
-		                    </div>
-		                    
-		                    <!-- 評価が高い店 -->
-		                    
+			        <!-- 評価が高い店 -->
+			        <h5 class="nagoyameshi-h5">評価が高い店</h5>
+			        <div class="row row-cols-lg-6 row-cols-4">
+				        <div th:each="restaurantScoreTop6 : ${restaurantScoreTop6}">
+							<a th:href="@{/restaurants/__${restaurantScoreTop6.getId()}__}">
+								<div class="card nagoyameshi-sm-card">
+									<img th:src="@{/storage/__${restaurantScoreTop6.getImageName}__}" class="card-img-top" alt="店舗画像">
+									<p class="card-title nagoyameshi-sm-card-title" th:text="${restaurantScoreTop6.getName()}"></p>
+									<p class="card-text" th:text="${restaurantScoreTop6.getCategory.getName()}"></p>
+									<p class="card-text mb-2">
+										<span class="rate-wrap">
+											<!-- インラインスタイルで直接評価点に基づいてスタイルを適用 -->
+										    <span class="rate-top" th:style="'--score: ' + ${topPageRestaurantScoreMap[restaurantScoreTop6.getId()]}"></span>
+			    							<span class="review-score-num-sm" th:text="${topPageRestaurantScoreMap[restaurantScoreTop6.getId()]}"></span>
+										</span>
+		                            </p>
+								</div>
+							</a>
+						</div>
+					</div>
+					
+					<!-- カテゴリ -->
+					<h5 class="nagoyameshi-h5">料理ジャンルから探す</h5>
+<!--					<div class="row row-cols-lg-6 row-cols-4">-->
+						
+<!--					</div>-->
+					<div class="nagoyameshi-top-category-box">
+						<div th:each="category : ${categories}" class="me-1 mb-1">
+							<a th:href="@{/restaurants?categoryId=__${category.getId}__}" th:text="${category.getName}" class="btn btn-outline-secondary"></a>
+						</div>
+					</div>
+					
+					<!-- 新着順 -->
+					<h5 class="nagoyameshi-h5">新着</h5>
+					<div class="row row-cols-lg-6 row-cols-4 nagoyameshi-top-restaurant-box-created">
+				        <div th:each="restaurantCreatedTop6 : ${restaurantCreatedTop6}">
+							<a th:href="@{/restaurants/__${restaurantCreatedTop6.getId()}__}">
+								<div class="card nagoyameshi-sm-card">
+									<img th:src="@{/storage/__${restaurantCreatedTop6.getImageName}__}" class="card-img-top" alt="店舗画像">
+									<p class="card-title nagoyameshi-sm-card-title" th:text="${restaurantCreatedTop6.getName()}"></p>
+									<p class="card-text" th:text="${restaurantCreatedTop6.getCategory.getName()}"></p>
+									<p class="card-text mb-2">
+										<span class="rate-wrap">
+											<!-- インラインスタイルで直接評価点に基づいてスタイルを適用 -->
+										    <span class="rate-top" th:style="'--score: ' + ${topPageRestaurantScoreMap[restaurantCreatedTop6.getId()]}"></span>
+			    							<span class="review-score-num-sm" th:text="${topPageRestaurantScoreMap[restaurantCreatedTop6.getId()]}"></span>
+										</span>
+		                            </p>
+								</div>
+							</a>
 						</div>
 					</div>
 				</div>
-			</main>
+			</div>
 			<div th:replace="~{fragment :: footer}"></div>	
 		</div>
 		<div th:replace="~{fragment :: scripts}"></div>

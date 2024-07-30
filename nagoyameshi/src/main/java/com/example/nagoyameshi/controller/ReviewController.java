@@ -40,16 +40,23 @@ public class ReviewController {
 	}
 	
 	// レビュー一覧用のメソッド
-	@GetMapping("/{id}/reviews")
-	public String index(@PathVariable(name = "id") Integer restaurantId,
+	@GetMapping("/{restaurant_id}/reviews")
+	public String index(@PathVariable(name = "restaurant_id") Integer restaurantId,
+						@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 						@PageableDefault(page = 0, size = 10, sort = "createdAt", direction = Direction.DESC) Pageable pageable,
 						Model model) 
 	{
 		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
+		// 編集・削除リンクを表示するかを判断するためのユーザー情報
+		User user = null;
+		if(userDetailsImpl != null) {
+			user = userDetailsImpl.getUser();
+		}
 		// restaurantIdをもとにレビューを表示
-		Page<Review> reviewPage = reviewRepository.findByRestaurant(restaurantRepository.getReferenceById(restaurantId), pageable);
+		Page<Review> reviewPage = reviewRepository.findByRestaurantIdAndHiddenFalse(restaurantId, pageable);
 		
 		model.addAttribute("restaurant", restaurant);
+		model.addAttribute("user", user);
 		model.addAttribute("reviewPage",reviewPage);
 		
 		return "reviews/index";
@@ -68,8 +75,8 @@ public class ReviewController {
 	// フォームの送信先を担当
 	@PostMapping("/{id}/reviews/create")
 	public String create(@ModelAttribute @Validated ReviewPostForm reviewPostForm,
+						 BindingResult bindingResult, //BindingResultは必ずバリデーション対象のすぐ後におく
 						 @PathVariable(name = "id") Integer restaurantId,
-						 BindingResult bindingResult, 
 						 RedirectAttributes redirectAttributes,
 						 @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 						 Model model) {
@@ -79,6 +86,7 @@ public class ReviewController {
 		
 		// エラーがあるときフォーム画面を返す
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("restaurant", restaurant);
 			return "reviews/post";
 		}
 		
@@ -98,22 +106,25 @@ public class ReviewController {
 	{
 		Review review = reviewRepository.getReferenceById(reviewId);
 		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
+		String imageName = review.getImageName();
 		User user = userDetailsImpl.getUser();
 		
 		ReviewEditForm reviewEditForm = new ReviewEditForm(reviewId, review.getTitle(), null, review.getEvaluation(), review.getComment());
 		
 		model.addAttribute("restaurant", restaurant);
+		model.addAttribute("imageName", imageName);
 		model.addAttribute("user", user);
 		model.addAttribute("reviewEditForm", reviewEditForm);
+		
 		return "reviews/edit";
 	}
 	
 	// フォームの送信先を担当
-	@PostMapping("/{id}/reviews/{reviewId}/update")
+	@PostMapping("/{restaurant_id}/reviews/{review_id}/update")
 	public String update(@ModelAttribute @Validated ReviewEditForm reviewEditForm,
-						 @PathVariable(name = "id") Integer restaurantId,
-						 @PathVariable(name = "reviewId") Integer reviewId,
-						 BindingResult bindingResult, 
+						 BindingResult bindingResult, //BindingResultは必ずバリデーション対象のすぐ後におく
+						 @PathVariable(name = "restaurant_id") Integer restaurantId,
+						 @PathVariable(name = "review_id") Integer reviewId,
 						 RedirectAttributes redirectAttributes,
 						 @AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
 						 Model model) 
@@ -123,19 +134,27 @@ public class ReviewController {
 		
 		// エラーがあるときフォーム画面を返す
 		if(bindingResult.hasErrors()) {
+			model.addAttribute("restaurant", restaurant);
 			return "reviews/edit";
 		}
-		
 		reviewService.update(reviewEditForm, restaurant, user);
+		
 		redirectAttributes.addFlashAttribute("successMessage", "レビューを更新しました。");
-		return "redirect:/restaurants/{id}";
+		
+		// リダイレクトURLに動的にIDを埋め込む
+		return String.format("redirect:/restaurants/%d", restaurantId);
 	}
 	
-	@PostMapping("/{id}/reviews/{reviewId}/delete")
-	public String delete(@PathVariable(name = "id") Integer restaurantId, RedirectAttributes redirectAttributes) {
-		reviewRepository.deleteById(restaurantId);
+	// レビュー削除用
+	@PostMapping("/{restaurant_id}/reviews/{review_id}/delete")
+	public String delete(@PathVariable(name = "restaurant_id") Integer restaurantId,
+						 @PathVariable(name = "review_id") Integer reviewId,
+						 RedirectAttributes redirectAttributes) {
+		reviewRepository.deleteById(reviewId);
 		
 		redirectAttributes.addFlashAttribute("successMessage", "レビューを削除しました。");
-		return "redirect:/restaurants/{id}";
+		
+		// リダイレクトURLに動的にIDを埋め込む
+		return String.format("redirect:/restaurants/%d", restaurantId);
 	}
 }

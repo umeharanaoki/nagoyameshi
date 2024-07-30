@@ -1,5 +1,7 @@
 package com.example.nagoyameshi.form;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.NotBlank;
 import lombok.Data;
 
@@ -20,7 +22,7 @@ public class SignupForm {
 	@NotBlank(message = "電話番号を入力してください。")
 	private String phoneNumber;
 	
-	private String birthday;
+	private LocalDate birthday;
 	
 	@NotBlank(message = "メールアドレスを入力してください。")
 	private String email;

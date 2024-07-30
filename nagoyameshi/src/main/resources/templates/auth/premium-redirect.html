@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th=”https://www.thymeleaf.org” xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment :: meta}"></div>
+		
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>プレミアムプラン加入確認</title>
+	</head>
+	<body>
+		<div class="nagoyameshi-wrapper">
+			<div th:replace="~{fragment :: header}"></div>
+			<main>
+				<div th:if="${successMessage}" class="alert alert-info nagoyameshi-alert-box">
+					<span th:text="${successMessage}"></span>
+				</div>
+				<p>
+					新しいサービスを楽しんでください。
+				</p>
+				<a th:href="@{/restaurants}">店を探す</a>
+			</main>
+			<div th:replace="~{fragment :: footer}"></div>	
+		</div>
+		<div th:replace="~{fragment :: scripts}"></div>
+	</body>
+</html>

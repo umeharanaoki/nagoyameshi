@@ -1,17 +1,130 @@
+/* ===========================================
+ * ===========================================
+   共通ここから↓
+=========================================== *
+=========================================== */
+
+:root {
+	--base-color: #FDFBF5;
+	--main-color: #E0C1A1;
+	--point-color: #8A5B58;
+	--pale-color: #F2E2CE;
+}
 html {
-	font-size: 14px;
+	font-size: 16px;
 }
 
 body {
 	font-family: 'Noto Sans JP', sans-serif;
+	background-color: var(--base-color);
+}
+
+main {
+	padding-top: 66px; /* header都の重なり防止：　marginだとパンくずリスト等の表示に悪影響があったのでpaddingで指定　*/
+	padding-bottom: 60px;
 }
 
 h1 {
 	font-size: 1.5rem;
+	text-align: center;
+	margin: 32px 0;
 }
 
+.nagoyameshi-wrapper {
+	min-height: 100vh;
+	position: relative;
+	box-sizing: border-box;
+	width: 1000px;
+	max-width: 100%;
+	margin: 0 auto;
+}
+
+.nagoyameshi-alert-box {
+	margin-top: 32px;
+}
+/*.alert {*/
+/*	margin: 0 !important;*/
+/*}*/
+
+/*----- navbar↓ -----*/
+.nagoyameshi-navbar {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100vw;
+	min-height: 60px;
+	background-color: var(--main-color);
+	z-index: 100;
+}
+
+.nagoyameshi-navbar-container {
+	width: 1000px;
+	max-width:100%;
+	margin: 0 auto;
+	display: flex;
+	justify-content: space-between;
+}
+
+.nagoyameshi-logo {
+	height: 40px;
+}
+
+.nagoyameshi-btn-login {
+	color: var(--point-color);
+	background-color: var(--base-color);
+	border-color: var(--point-color);
+}
+
+.nagoyameshi-btn-login:hover {
+	color: var(--point-color);
+	background-color: var(--base-color);
+	font-weight: bold;
+	border: solid 2px var(--point-color);
+/*	border-width: b;*/
+/*	border-color: var(--point-color);*/
+}
+
+.nagoyameshi-dropdown-item:active {
+	background-color: #5196a6;
+}
+/*----- navbar↑ -----*/
+
+footer {
+    width: 100%;
+    height: 60px;
+    position: absolute;
+    bottom: 0;    
+    background-color: var(--main-color);
+    box-shadow: 0 0 0 100vmax var(--main-color); /*wrapperの左右の余白を超えて背景色を指定*/
+	clip-path: inset(0 -100vmax);
+}
+
+/*----- flexbox↓ -----*/
+.nagoyameshi-flex-center {
+	display: flex;
+	justify-content: center;
+}
+
+.nagoyameshi-flex-between {
+	display: flex;
+	justify-content: space-between;
+	flex-wrap: wrap;
+	margin-bottom: 24px;
+	width: 100%;
+}
+
+.nagoyameshi-flex-end {
+	display: flex;
+	justify-content: end;
+	align-items: center;
+	margin-bottom: 16px;
+}
+/*----- flexbox↑ -----*/
+
+/*----- 通常のリンク↓ -----*/
+/**======= 両方いるか確認 =======**/
 a {
-    color: #8A5B58;
+    color: var(--point-color);
     text-decoration: none !important;
 }
 
@@ -19,58 +132,55 @@ a:hover {
     color: rgb(128, 64, 64);
 }
 
-footer {
-    width: 100%;
-    height: 60px;
-    position: absolute;
-    bottom: 0;    
-    background-color: #E0C1A1;
-}
-
-.nagoyameshi-wrapper {
-	min-height: 100vh;
-	position: relative;
-	padding-bottom: 60px;
-	box-sizing: border-box;
-	background-color: #FDFBF5;
-}
-
-.nagoyameshi-navbar {
-	min-height: 60px;
-}
-
-.nagoyameshi-logo {
-	height: 40px;
-}
-
 .nagoyameshi-page-link {
-    color: #8A5B58;
+    color: var(--point-color);
 }
 
 .nagoyameshi-page-link:hover {
     color: rgb(128, 64, 64);
 }
+/*----- 通常のリンク↑ -----*/
 
-.nagoyameshi-active {
-    background-color: #8A5B58 !important;
-    border-color: #8A5B58 !important;
-}
-
-.nagoyameshi-main-color {
-	background-color: #E0C1A1;
-}
-.nagoyameshi-base-color {
-	background-color: #FDFBF5;
-}
-
-.nagoyameshi-dropdown-item:active {
-	background-color: #5196a6;
-}
-
+/*----- ボタン↓ -----*/
 .nagoyameshi-btn {
-	background-color: #8A5B58;
+	color: white !important;
+	background-color: var(--point-color);
+	box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
+}
+.nagoyameshi-btn:hover {
+	background-color: #A76472;
 }
 
+/* フォーム送信用ボタン */
+.nagoyameshi-btn-box-form-post {
+	display: flex;
+	justify-content: center;
+	margin: 16px 0 32px;
+}
+/*----- ボタン↑ -----*/
+
+/*.nagoyameshi-active {*/
+/*    background-color: var(--point-color) !important;*/
+/*    border-color: var(--point-color) !important;*/
+/*}*/
+
+/* ----- 検索ボックス↓ -----*/
+/*.nagoyameshi-searchbox {*/
+/*	margin-bottom: 24px;*/
+/*}*/
+.no-focus-outline .form-control:focus {
+	outline: none !important; /*bootstrapのform-controlを特定のページのみ上書き*/
+	box-shadow: none !important;
+}
+/*----- 検索ボックス↑ -----*/
+
+/* ----- パンくずリスト↓ -----*/
+.breadcrumb-box {
+	margin: 24px 0 16px 0;
+}
+/*----- パンくずリスト↑ -----*/
+
+/* ----- 削除関連↓ -----*/
 .nagoyameshi-link-danger {
 	color: #f2594b;
 }
@@ -80,8 +190,10 @@ footer {
 }
 
 .nagoyameshi-btn-danger {
+	color: white;
 	background-color: #f2594b !important;
 	transition: 0.1s;
+	box-shadow: 0 .125rem .25rem rgba(0, 0, 0, .075);
 }
 
 .nagoyameshi-btn-danger:hover {
@@ -90,6 +202,243 @@ footer {
  
 .nagoyameshi-modal-close {
 	color: white;
+}
+/* ----- 削除関連↑ -----*/
+
+/*----- pagination↓ -----*/
+.pagination {
+	margin: 0 !important; /* bootstrap上書き */
+}
+
+.nagoyameshi-pagination-box {
+	display: flex;
+	justify-content: center;
+	margin-bottom: 32px;
+}
+
+.pagination-color {
+	color: var(--point-color);
+}
+
+.pagination-color-active {
+	background-color: var(--point-color) !important;
+}
+/*----- pagenation↑ -----*/
+
+/*----- bootstrap上書き↓ -----*/
+.container {
+/*	margin: 0 !important;*/  /* marginを消してしまうと中央揃えが消えるのでやめた */
+	padding: 0 !important;
+}
+
+/*----- bootstrap上書き↑ -----*/
+
+/* -------------------------------------------
+	フォーム関係ここから↓
+------------------------------------------- */
+.nagoyameshi-form-inline {
+	display: inline-flex;
+	align-items: center;
+}
+
+.form-between {
+	margin: 0 8px;
+}
+/* -------------------------------------------
+	フォーム関係ここまで↑
+------------------------------------------- */
+
+
+/* -------------------------------------------
+	店舗カードここから↓
+------------------------------------------- */
+/*----- 通常のカード用（共通）↓ -----*/
+.nagoyameshi-md-card-left-img {
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+}
+
+/*----- レビューの★↓ -----*/
+/* レビューの★全体のコンテナ */
+.rate-wrap {
+    display: flex;
+    width: 100%;
+    font-weight: bold;
+}
+/* ★表示の基準位置 */
+.rate {
+    position: relative;
+    display: inline-block;
+    width: 120px; /* 星5個の幅 */
+    height: 24px; /* 星1個の幅 */
+    font-size: 24px;
+}
+/* ★部分共通 */
+.rate::before,
+.rate::after {
+    position: absolute;
+    display: inline-block;
+    height: 24px;
+    content: '★★★★★';
+    line-height: 24px;
+}
+/* 背景の★ */
+.rate::before {
+    color: #c4c4c4; /* 背景の星、色はグレー */
+}
+/* 評価に対応した★ */
+.rate::after {
+    overflow: hidden;
+	width: calc(24px * var(--score)); /* 評価に応じてゴールド部分を動的に変更 */
+    color: #ffb906; /* 評価の星、色はゴールド */
+}
+/*----- レビューの★↑ -----*/
+
+.nagoyameshi-card-text {
+	margin-bottom: 8px;
+}
+/* レビューの点数の位置調整 */
+.review-score-num {
+	padding: 2px 0 0 8px;
+}
+
+/*----- 通常のカード用（共通）↑ -----*/
+
+/*----- 小さいカード用(トップページ）↓ -----*/
+/*----- レビューの★↓ -----*/
+/* ★表示の基準位置 */
+.rate-top {
+    position: relative;
+    display: inline-block;
+    width: 80px; /* 星5個の幅 */
+    height: 16px; /* 星1個の幅 */
+    font-size: 16px;
+}
+/* ★部分共通 */
+.rate-top::before,
+.rate-top::after {
+    position: absolute;
+    display: inline-block;
+    height: 16px;
+    content: '★★★★★';
+    line-height: 16px;
+}
+/* 背景の★ */
+.rate-top::before {
+    color: #c4c4c4; /* 背景の星、色はグレー */
+}
+/* 評価に対応した★ */
+.rate-top::after {
+    overflow: hidden;
+	width: calc(16px * var(--score)); /* 評価に応じてゴールド部分を動的に変更 */
+    color: #ffb906; /* 評価の星、色はゴールド */
+}
+/*----- レビューの★↑ -----*/
+
+/* レビューの点数の位置調整 */
+.review-score-num-sm {
+	padding-left: 8px;
+}
+/*----- 小さいカード用（トップページ）↑ -----*/
+/* -------------------------------------------
+	店舗カードここまで↑
+------------------------------------------- */
+
+/*----- レビューカード↓ -----*/
+.nagoyameshi-review-card {
+	display: flex;
+	flex-direction: row;
+	height: 194px;
+	margin-bottom: 24px;
+}
+
+.nagoyameshi-review-card-column {
+	display: flex;
+	flex-direction: row;
+	height: 194px;
+	margin-bottom: 16px;
+}
+
+.nagoyameshi-review-title {
+	font-weight: bold;
+}
+
+.nagoyameshi-review-text {
+	font-size: 14px;
+	margin-bottom: 8px;
+}
+
+.nagoyameshi-review-hr {
+	margin: 8px 0 !important;
+}
+
+.truncate-multiline {
+	display: -webkit-box;
+	-webkit-box-orient: vertical;
+	-webkit-line-clamp: 3; /* 表示する行数 */
+	overflow: hidden;
+	text-overflow: ellipsis;
+}
+
+.rate-review {
+    position: relative;
+    display: inline-block;
+    width: 80px; /* 星5個の幅 */
+    height: 16px; /* 星1個の幅 */
+    font-size: 16px;
+}
+/* ★部分共通 */
+.rate-review::before,
+.rate-review::after {
+    position: absolute;
+    display: inline-block;
+    height: 16px;
+    content: '★★★★★';
+    line-height: 16px;
+}
+/* 背景の★ */
+.rate-review::before {
+    color: #c4c4c4; /* 背景の星、色はグレー */
+}
+/* 評価に対応した★ */
+.rate-review::after {
+    overflow: hidden;
+	width: calc(16px * var(--score)); /* 評価に応じてゴールド部分を動的に変更 */
+    color: #ffb906; /* 評価の星、色はゴールド */
+}
+
+.nagoyameshi-review-bottom-box {
+	display: flex;
+	justify-content: space-between;
+}
+
+.nagoyameshi-review-card-right-img {
+	height: 100%;
+	width: 100%;
+	object-fit: cover;
+	border-radius: 0 5px 5px 0; /* cardの丸みに合わせる */
+}
+
+.card-img-position-adjustment-right {
+	padding-right: 11px !important;
+}
+/*----- レビューカード↑ -----*/
+
+/* ===========================================
+ * ===========================================
+   共通ここまで↑	
+=========================================== *
+=========================================== */
+
+
+/* ===========================================
+ * ===========================================
+   トップページここから↓	
+=========================================== *
+=========================================== */
+.nagoyameshi-carousel-area {
+	padding-top: 66px;
 }
 
 .bgCarousel {
@@ -103,7 +452,6 @@ footer {
     background-size: cover;
     width: 100%;
     height: 100%;
-    
 }
 
 .bgCarousel__item:nth-child(1) {
@@ -118,76 +466,247 @@ footer {
 	background-image: url("../images/top03.jpg");
 }
 
-.nagoyameshi-top-image {
-	position: absolute;
-	width: 50%;
-	top: 20%;
+.nagoyameshi-top-left {
+	display: flex;
+	flex-direction: column;
+	padding: 40px 0 72px 40px;
+	margin: 80px 0 0 0;
+	height: 100%;
+	backdrop-filter: blur(10px);
+	border-radius: 8px;
 }
 
-.top-search {
-    background: url(data:image/png;base64,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) no-repeat 10px 6px #fcfcfc;
+.nagoyameshi-top-image {
+	width: 100%;
+	max-width: 480px;
+	margin-bottom: 80px;
+}
+
+.nagoyameshi-sub-copy {
+	margin-left: 8px;
+	margin-bottom: 0;
+}
+
+.nagoyameshi-top-right {
+	display: flex;
+	align-items: end;
+	margin-left: 48px;
+	margin-bottom: 72px;
+}
+
+.top-search-form {
     border:1px solid #d1d1d1;
-    font: bold 12px Arial, Helvetica, Sans-serif;
+	font-size: 12px;
     color:#bebebe;
+    background-color: var(--base-color);
     width:150px;
-    padding:6px 15px 6px 35px;
+    padding: 8px;
     border-radius:20px;
     text-shadow:0 2px 3px rgba(0,0,0,0.1);
     box-shadow:0 1px 3px rgba(0,0,0,0.15) inset;
-	}
-
-.top-search:focus{
-    width:200px;
-    outline:0;
-}
-
-/*レビューの星*/
-.rate-wrap {
     display: flex;
-    width: 200px;
-    align-items: center;
-    justify-content: space-between;
-    padding: 5px;
-    margin: 20px auto 0;
-    font-weight: bold;
+    flex-direction: row;
 }
 
-.rate {
-    position: relative;
-    display: inline-block;
-    width: 150px; /* 星5個の幅 */
-    height: 30px; /* 星1個の幅 */
-    font-size: 30px;
+.top-search-input{
+	border: none;
+	width: 100%;
 }
-.rate::before,
-.rate::after {
-    position: absolute;
-    display: inline-block;
-    height: 30px;
-    content: '★★★★★';
-    line-height: 30px;
-}
-.rate::before {
-    color: #c4c4c4; /* 背景の星、色はグレー */
-}
-.rate::after {
-    overflow: hidden;
-	width: calc(30px * var(--score)); /* 評価の星 */
-    color: #ffb906; /* 評価の星、色はゴールド */
+.top-search-input:focus {
+	outline: 0;
 }
 
+.top-search-btn {
+	border: none;
+	background-color: var(--base-color);
+}
 
- @media screen and (min-width: 1400px) {
-   .nagoyameshi-container {
-     max-width: 1200px;
-   }
- }
+.nagoyameshi-top-mainarea {
+	padding-bottom: 60px;
+}
 
-/*#category-conteiner {*/
-/*	display: flex;*/
-/*width: 1255.918px;*/
-/*align-items: flex-start;*/
-/*align-content: flex-start;*/
-/*gap: 8px;*/
-/*flex-wrap: wrap;*/
+/*----- h5↓ -----*/
+.nagoyameshi-h5 {
+	margin: 32px 0 16px;
+}
+.nagoyameshi-h5-right {
+	margin: 0 0 56px;
+}
+/*----- h5↑ -----*/
+
+.nagoyameshi-top-restaurant-box-created {
+/*	width: 100%;*/
+	margin-bottom: 32px;
+}
+
+/*----- small　カード↓ -----*/
+.nagoyameshi-sm-card {
+	background-color: var(--pale-color);
+	height: 200px;
+}
+
+.nagoyameshi-sm-card p {
+	font-size: 14px;
+	padding: 8px 8px 0;
+	margin: 0px;
+}
+.nagoyameshi-sm-card-title {
+	overflow: hidden;
+	text-overflow: ellipsis;
+	white-space: nowrap;
+}
+.card-img-top {
+	height: 101px;  /* bootstrapに追記 */
+}
+
+/*@media (min-width: 992px) {*/
+/*  .nagoyameshi-sm-card:nth-child(n+5) {*/
+/*    display: none;*/
+/*  }*/
 /*}*/
+/*----- small　カード↑ -----*/
+
+.nagoyameshi-top-category-box {
+	display: flex;
+	justify-content: start;
+	flex-wrap: wrap;
+}
+/* ===========================================
+ * ===========================================
+   トップページここまで↑	
+=========================================== *
+=========================================== */
+
+
+/* ===========================================
+ * ===========================================
+   店舗一覧ここから↓	
+=========================================== *
+=========================================== */
+
+.nagoyameshi-left-search-box {
+	margin-bottom: 32px;
+}
+
+.nagoyameshi-left-search input,
+.nagoyameshi-left-search select {
+	font-size: 14px;
+}
+
+.nagoyameshi-search-form-btn-box {
+	display: flex;
+	justify-content: center;
+	margin: 0 0 16px;
+}
+
+/* ===========================================
+ * ===========================================
+   店舗一覧ここまで↑	
+=========================================== *
+=========================================== */
+
+
+/* ===========================================
+ * ===========================================
+   店舗詳細ここから↓	
+=========================================== *
+=========================================== */
+.nagoyameshi-reservation-form {
+	margin-bottom: 16px;
+}
+/* レビュー投稿ボタンとレビュー一覧ページへのリンクの表示位置を整える */
+.blank-box {
+	width: 80px;
+}
+/* ===========================================
+ * ===========================================
+   店舗詳細ここまで↑	
+=========================================== *
+=========================================== */
+
+
+/* ===========================================
+ * ===========================================
+   プレミアム紹介ページここから↓	
+=========================================== *
+=========================================== */
+.nagoyameshi-premium-flexbox {
+	display: flex;
+	align-items: center;
+	margin: 16px 0;
+}
+
+.nagoyameshi-premium-h5 {
+	margin-bottom: 16px;
+}
+
+.nagoyameshi-premium-img-box {
+	width: 80px;
+	height: 80px;
+	margin-right: 24px;
+}
+
+.nagoyameshi-premium-img {
+	width: 80px;
+	height: 80px;
+	object-fit: fill;
+/*	max-width: 100%;*/
+/*	height: auto;*/
+/*	display: block;*/
+}
+
+.nagoyameshi-premium-text {
+	white-space: pre-wrap;
+	margin: 0;
+}
+
+.nagoyameshi-premium-btn-box {
+	display: flex;
+	justify-content: center;
+	margin: 24px 0 32px;
+}
+/* ===========================================
+ * ===========================================
+   プレミアム紹介ページここまで↑	
+=========================================== *
+=========================================== */
+
+
+/* ===========================================
+ * ===========================================
+   （管理者用）ユーザー・店舗一覧ページここから↓	
+=========================================== *
+=========================================== */
+.table {
+	margin-bottom: 24px !important; /*bootstrapの上書き*/
+}
+
+/* ===========================================
+ * ===========================================
+   （管理者用）ユーザー・店舗一覧ページここまで↑	
+=========================================== *
+=========================================== */
+
+
+/* ===========================================
+ * ===========================================
+   （管理者用）売上管理ページここから↓	
+=========================================== *
+=========================================== */
+.nagoyameshi-chart-box {
+	height: 400px !important;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	align-items: center;
+}
+
+.nagoyameshi-chart {
+	
+}
+
+/* ===========================================
+ * ===========================================
+   （管理者用）売上管理ページここまで↑	
+=========================================== *
+=========================================== */

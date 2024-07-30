@@ -2,6 +2,7 @@ package com.example.nagoyameshi.entity;
 
 import java.sql.Timestamp;
 import java.time.LocalTime;
+import java.util.List;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -10,7 +11,9 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import lombok.Data;
 
 @Entity
@@ -67,4 +70,18 @@ public class Restaurant {
 	
 	@Column(name = "updated_at", insertable = false, updatable = false)
 	private Timestamp updatedAt;
+	
+	// レビュー点数でレストランを検索できるようにフィールドを追加
+	@OneToMany(mappedBy = "restaurant")
+	private List<Review> reviews;
+	
+	// 評価の平均を取得するメソッド（オプション）
+    @Transient
+    public Double getAverageEvaluation() {
+        return reviews.stream()
+                      .filter(review -> !review.isHidden())  // 隠されたレビューを除外
+                      .mapToDouble(Review::getEvaluation)
+                      .average()
+                      .orElse(0.0);
+    }
 }

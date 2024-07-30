@@ -4,6 +4,8 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.UUID;
 
 import org.springframework.stereotype.Service;
@@ -25,6 +27,7 @@ public class ReviewService {
 		this.reviewRepository = reviewRepository;
 	}
 	
+	// レビューをデータベースに登録
 	@Transactional
     public void create(ReviewPostForm reviewPostForm, Restaurant restaurant, User user) {
         Review review = new Review();
@@ -47,6 +50,7 @@ public class ReviewService {
         reviewRepository.save(review);
     }
 	
+	// データベースの更新
 	@Transactional
 	public void update(ReviewEditForm reviewEditForm, Restaurant restaurant, User user) {
 		Review review = reviewRepository.getReferenceById(reviewEditForm.getId());
@@ -67,10 +71,45 @@ public class ReviewService {
         review.setComment(reviewEditForm.getComment());
         
         reviewRepository.save(review);
-		
 	}
 	
-	  // UUIDを使って生成したファイル名を返す
+	// レストラン評価の平均点算出
+	// レストランのIDとそのレストランの平均点をマッピング
+	public Map<Integer, String> calculateAverageEvaluations(Iterable<Restaurant> restaurants) {  // List型とPage型のどちらも引数に取れるようにする
+        Map<Integer, String> averageEvaluationMap = new HashMap<>();
+        
+        for (Restaurant restaurant : restaurants) {
+        	// 平均点を求める
+            Double averageEvaluation = reviewRepository.findAverageEvaluationByRestaurantAndHiddenFalse(restaurant.getId());
+            // レビューがない店舗でエラーが出ないようnullチェックする
+            if(averageEvaluation != null) {
+            	// 小数点以下第二位までに変換
+	            averageEvaluation = averageEvaluation * 100;
+	            long averageEvaluationRound = Math.round(averageEvaluation);
+	            averageEvaluation = (double)averageEvaluationRound/100;
+            } else {
+            	averageEvaluation = 0.00;
+            }
+            
+            // 小数点以下第二位に数値を揃えるためにフォーマットをStringに(4.20等）
+            String formattedAverage = String.format("%.2f", averageEvaluation);
+            averageEvaluationMap.put(restaurant.getId(), formattedAverage);
+        }
+        
+        return averageEvaluationMap;
+    }
+	
+	// レビューを非表示にする
+	@Transactional
+	public void hidden(Integer reviewId) {
+		Review review = reviewRepository.getReferenceById(reviewId);
+		// 1をsetすることで非表示にするreviewを区別する
+		review.setHidden((byte)1);
+		
+		reviewRepository.save(review);
+	}
+	
+	// UUIDを使って生成したファイル名を返す
     public String generateNewFileName(String fileName) {
         String[] fileNames = fileName.split("\\.");                
         for (int i = 0; i < fileNames.length - 1; i++) {

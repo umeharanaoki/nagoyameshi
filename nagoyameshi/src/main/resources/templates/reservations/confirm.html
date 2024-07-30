@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns:th=”https://www.thymeleaf.org” xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment :: meta}"></div>
+		
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>予約確認</title>
+	</head>
+	<body>
+		<div class="nagoyameshi-wrapper">
+			<div th:replace="~{fragment :: header}"></div>
+			<main>
+				<nav class="breadcrumb-box" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">   
+			 		<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>                     
+                        <li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/restaurants/__${restaurant.getName()}__}" th:text="${restaurant.name}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">予約確認</li>
+                    </ol>
+                </nav>
+				<h1>予約確認</h1>
+				<div class="container">
+					<div class="row justify-content-center">
+						<div class="col-xl-4 col-lg-5">
+							<form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reservations/create}" th:object="${reservationForm}">
+								<!-- 入力はしないが値を保持するため -->
+								<input type="hidden" th:field="*{visitingTime}">
+								<input type="hidden" th:field="*{visitingDate}">
+								<input type="hidden" th:field="*{numberOfPeople}">
+								
+								<div class="row pb-2 mb-2 border-bottom">
+									<div class="col-6">
+										<span class="fw-bold">店名</span>
+									</div>
+									<div class="col">
+										<span th:text="${restaurant.getName()}"></span>
+									</div>
+								</div>
+								<div class="row pb-2 mb-2 border-bottom">
+									<div class="col-6">
+										<span class="fw-bold">来店日</span>
+									</div>
+									<div class="col">
+										<span th:text="*{visitingDate}"></span>
+									</div>
+								</div>
+								<div class="row pb-2 mb-2 border-bottom">
+									<div class="col-6">
+										<span class="fw-bold">来店時間</span>
+									</div>
+									<div class="col">
+										<span th:text="*{visitingTime}"></span>
+									</div>
+								</div>
+								<div class="row pb-2 mb-4">
+									<div class="col-6">
+										<span class="fw-bold">来店人数</span>
+									</div>
+									<div class="col">
+										<span th:text="*{numberOfPeople + '名'}"></span>
+									</div>
+								</div>
+								<div class="nagoyameshi-flex-center">
+									<button type="submit" class="btn nagoyameshi-btn w-100">確定する</button>
+								</div>
+							</form>
+							
+						</div>
+					</div>
+					
+                    
+				</div>
+			</main>
+			<div th:replace="~{fragment :: footer}"></div>	
+		</div>
+		<div th:replace="~{fragment :: scripts}"></div>
+	</body>
+</html>

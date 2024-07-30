@@ -8,21 +8,15 @@
 		<title>会員情報</title>
 	</head>
 	<body>
-		<div class="nagoyameshi-base-color">
+		<div class="nagoyameshi-wrapper">
 			<div th:replace="~{fragment :: header}"></div>
 			
 			<main>
 				<div class="container pt-4 pb-5">
                     <div class="row justify-content-center">
                         <div class="col-xl-5 col-lg-6 col-md-8">
-                            <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">                        
-                                    <li class="breadcrumb-item"><a th:href="@{/admin/users}">ホーム</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">会員情報</li>
-                                </ol>
-                            </nav> 
                             
-                            <h1 class="mb-4 text-center" th:text="${user.getName()}"></h1>
+                            <h1>会員情報</h1>
                             
                             <!-- リダイレクトメッセージ -->
                     		<div th:if="${successMessage}" class="alert alert-info">
@@ -97,7 +91,7 @@
                                     </div>
                                 </div>
                                 <!-- 生年月日 -->
-                                <div class="row pb-2 mb-2 border-bottom">
+                                <div class="row pb-2 mb-2">
                                     <div class="col-4">
                                         <span class="fw-bold">生年月日</span>
                                     </div>

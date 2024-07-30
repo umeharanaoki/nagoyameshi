@@ -1,5 +1,7 @@
 package com.example.nagoyameshi.form;
 
+import java.time.LocalDate;
+
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
@@ -26,11 +28,11 @@ public class UserEditForm {
 	@NotBlank(message = "電話番号を入力してください。")
 	private String phoneNumber;
 	
-	private String birthday;
+	private LocalDate birthday;
 	
 	@NotBlank(message = "メールアドレスを入力してください。")
 	private String email;
 	    
-	@NotBlank(message = "パスワードを入力してください。")
-	private String password;  
+//	@NotBlank(message = "パスワードを入力してください。")
+//	private String password;  
 }

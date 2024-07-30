@@ -72,6 +72,12 @@
 			<artifactId>spring-security-test</artifactId>
 			<scope>test</scope>
 		</dependency>
+		<!-- stripeの導入 -->
+		<dependency>
+			<groupId>com.stripe</groupId>
+			<artifactId>stripe-java</artifactId>
+			<version>26.4.0</version>
+		</dependency>
 	</dependencies>
 
 	<build>

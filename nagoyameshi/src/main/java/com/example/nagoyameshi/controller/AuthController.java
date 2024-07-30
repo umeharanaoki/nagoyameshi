@@ -1,5 +1,6 @@
 package com.example.nagoyameshi.controller;
 
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -15,6 +16,8 @@ import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.entity.VerificationToken;
 import com.example.nagoyameshi.event.SignupEventPublisher;
 import com.example.nagoyameshi.form.SignupForm;
+import com.example.nagoyameshi.security.UserDetailsImpl;
+import com.example.nagoyameshi.service.StripeService;
 import com.example.nagoyameshi.service.UserService;
 import com.example.nagoyameshi.service.VerificationTokenService;
 
@@ -25,11 +28,13 @@ public class AuthController {
 	private final UserService userService;
 	private final SignupEventPublisher signupEventPublisher;
 	private final VerificationTokenService verificationTokenService;
+	private final StripeService stripeService;
 	
-	public AuthController(UserService userService, SignupEventPublisher signupEventPublisher, VerificationTokenService verificationTokenService) {
+	public AuthController(UserService userService, SignupEventPublisher signupEventPublisher, VerificationTokenService verificationTokenService, StripeService stripeService) {
 		this.userService = userService;
 		this.signupEventPublisher = signupEventPublisher;
 		this.verificationTokenService = verificationTokenService;
+		this.stripeService = stripeService;
 	}
 	// ログイン画面を返す
 	@GetMapping("/login")
@@ -87,5 +92,26 @@ public class AuthController {
         
         return "auth/verify";         
     }    
+	
+	@GetMapping("/premium")
+	public String premium(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+						  HttpServletRequest httpServletRequest,
+						  Model model) {
+		User user = userDetailsImpl.getUser();
+		String sessionId = stripeService.createStripeSession(httpServletRequest, user.getId());
+				
+		model.addAttribute("user", user);
+		model.addAttribute("sessionId", sessionId);
+		
+		return "auth/premium";
+	}
+	
+	@GetMapping("/premium/premium-redirect")
+	public String redirect(Model model) {
+		
+		model.addAttribute("successMessage", "プレミアムプランに加入しました。");
+		
+		return "auth/premium-redirect";
+	}
 	
 }

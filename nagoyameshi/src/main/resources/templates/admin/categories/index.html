@@ -8,42 +8,55 @@
 		<title>カテゴリ管理</title>
 	</head>
 	<body>
-		<div class="nagoyameshi-base-color">
+		<div class="nagoyameshi-wrapper">
 			<div th:replace="~{fragment :: header}"></div>
 			<main>
 				<div class="container">
 					
 					<h1 class="text-center">カテゴリ管理</h1>
 					<!-- リダイレクトメッセージ -->
-                    <div th:if="${createSuccessMessage}" class="alert alert-info">
-                    	<span th:text="${createSuccessMessage}"></span>
+                    <div th:if="${successMessage}" class="alert alert-info">
+                    	<span th:text="${successMessage}"></span>
                     </div> 
-                    <div th:if="${updateSuccessMessage}" class="alert alert-info">
-                    	<span th:text="${updateSuccessMessage}"></span>
-                    </div>  
+                    
 					<!-- 現在のカテゴリ一覧 -->
-					<div id="category-container" class="bg-white p-5 my-3 border border-secondary d-flex justify-content-start flex-wrap">
+					<div class="category-container bg-white p-5 my-3 border border-secondary d-flex justify-content-start flex-wrap">
 						<div th:each="category : ${categories}" class="me-1 mb-1">
-							<button class="btn btn-outline-secondary" th:text="${category.getName}"></button>
+							<!-- カテゴリをボタン形式で表示して、クリックされたカテゴリを更新・削除できるようにonclickを設定 -->
+							<button class="btn btn-outline-secondary"
+									th:text="${category.getName}"
+									th:attr="data-id=${category.id}, data-name=${category.name}"
+									onclick="selectCategory(this)">
+							</button>
 						</div>
 					</div>
 					<!-- カテゴリ管理用フォーム -->
-					<div>
-						<!-- 未選択時:登録ボタン -->
-						<form method="post" th:action="@{/admin/categories/create}" th:object="${categoryRegisterForm}">
-							<div class="input-group">
-                            	<input type="text" class="form-control" th:field="*{name}" placeholder="カテゴリ名">
-                            	<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">登録</button> 
-                        	</div>
-						</form>
-						<!-- カテゴリ選択時:更新・削除ボタン -->
-						<form method="post" th:action="@{/admin/categories/update}" th:object="${categoryEditForm}">
-							<div class="input-group">
-                            	<input type="text" class="form-control" th:field="*{name}">
-                            	<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">更新</button> 
-                        	</div>
-						</form>
-						<a href="#" class="nagoyameshi-link-danger" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal">削除</a>
+					<div class="nagoyameshi-flex-end">
+						<!-- 未選択時:登録フォーム -->
+						<div id="categoryRegisterForm">
+							<form method="post" th:action="@{/admin/categories/create}" th:object="${categoryRegisterForm}">
+								<div class="input-group">
+	                            	<input type="text" class="form-control" th:field="*{name}" placeholder="カテゴリ名">
+	                            	<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">登録</button> 
+	                        	</div>
+							</form>
+						</div>
+						<!-- カテゴリ選択時:更新・削除フォーム -->
+						<div id="categoryEditForm" style="display: none; display: flex;"><!-- 非選択時は非表示に -->
+							<!-- 更新フォーム -->
+							<form method="post" th:action="@{/admin/categories/update}" th:object="${categoryEditForm}">
+								<div class="input-group">
+									<!-- id -->
+									<input type="hidden" th:field="*{id}">
+									<div class="input-group">
+		                            	<input type="text" class="form-control" th:field="*{name}" placeholder="カテゴリ名">
+		                            	<button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">更新</button> 
+									</div>
+	                        	</div>
+							</form>
+							<!-- 削除用ボタン -->
+							<a href="#" data-bs-toggle="modal" data-bs-target="#deleteCategoryModal" class="btn nagoyameshi-btn-danger ms-2">削除</a>
+						</div>
 					</div>
 					<!-- 削除用モーダル -->
                     <div class="modal fade" id="deleteCategoryModal" tabindex="-1" aria-labelledby="deleteCategoryModal">
@@ -54,13 +67,15 @@
                                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
                                 </div>
                                 <div class="modal-body">
-								<p text="カテゴリを削除してもよろしいですか？"></p>
+									<!-- 確認メッセージは選択されたカテゴリに応じてjavascriptで設定 -->
+									<p id="deleteCategoryMessage"></p>
 								</div>
                                 <div class="modal-footer">
-                                    <form method="post"th:action="@{/admin/categories/delete}">
-                                        <button type="submit" class="btn nagoyameshi-btn-danger text-white shadow-sm">削除</button>
-                                    </form>
-                                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">キャンセル</button>
+									<form id="categoryDeleteForm" method="post">
+									    <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" />
+									    <button type="submit" class="btn nagoyameshi-btn-danger">削除</button>
+									</form>
+									<button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">キャンセル</button>
                                 </div>
                             </div>
                         </div>
@@ -70,5 +85,6 @@
 			<div th:replace="~{fragment :: footer}"></div>	
 		</div>
 		<div th:replace="~{fragment :: scripts}"></div>
+		<script th:src="@{/js/select-category.js}"></script>
 	</body>
 </html>

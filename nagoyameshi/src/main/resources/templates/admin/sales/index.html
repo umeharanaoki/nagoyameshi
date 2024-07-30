@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html xmlns:th=”https://www.thymeleaf.org” xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment :: meta}"></div>
+		
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		
+		<title>店舗一覧</title>
+	</head>
+	<body>
+		<div class="nagoyameshi-wrapper">
+			<div th:replace="~{fragment :: header}"></div>
+			<main>
+				<h1 class="nagoyameshi-h1">売上確認</h1>
+				<div class="container">
+					<div class="row">
+                        <!-- 左の検索窓 -->
+						<div class="col-md-6 col-12">
+							<h5 class="text-center">期間別集計</h5>
+							<div class="nagoyameshi-chart-box">
+								<canvas id="chartPeriod" class="nagoyameshi-chart"></canvas>
+							</div>
+						</div>
+						<!-- 右の検索結果一覧 -->
+						<div class="col-6">
+							<h5 class="text-center">年代別集計</h5>
+							<div class="nagoyameshi-chart-box">
+	                            <canvas id="chartGeneration" class="nagoyameshi-chart"></canvas>
+							</div>
+						</div>
+					</div>
+				</div>
+			</main>
+			<div th:replace="~{fragment :: footer}"></div>	
+		</div>
+		<div th:replace="~{fragment :: scripts}"></div>
+		<!-- chart.jsの導入 -->
+		<!-- 開発環境用 -->
+		<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+		<!-- 本番環境用 -->
+<!--		<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.min.js"></script>-->
+		<script th:inline="javascript">
+			const subscriptionDataMap = /*[[${subscriptionDataMap}]]*/'subscriptionDataMap';
+			const subscriptionUserGenerationMap = /*[[${subscriptionUserGenerationMap}]]*/'subscriptionUserGenerationMap';
+		</script>
+		<script th:src="@{/js/chart-create.js}"></script>
+	</body>
+</html>

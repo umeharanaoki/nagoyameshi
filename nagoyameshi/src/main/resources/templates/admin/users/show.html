@@ -5,24 +5,24 @@
 		
 		<div th:replace="~{fragment :: styles}"></div>
 		
-		<title>管理者用店舗詳細</title>
+		<title>（管理者用）ユーザー詳細</title>
 	</head>
 	<body>
-		<div class="nagoyameshi-base-color">
+		<div class="nagoyameshi-wrapper">
 			<div th:replace="~{fragment :: header}"></div>
 			
 			<main>
+                <nav class="breadcrumb-box" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">                        
+                        <li class="breadcrumb-item"><a th:href="@{/admin/users}">ユーザー一覧</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">ユーザー詳細</li>
+                    </ol>
+                </nav> 
 				<div class="container pt-4 pb-5">
                     <div class="row justify-content-center">
                         <div class="col-xl-5 col-lg-6 col-md-8">
-                            <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">                        
-                                    <li class="breadcrumb-item"><a th:href="@{/admin/users}">ユーザー一覧</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">ユーザー詳細</li>
-                                </ol>
-                            </nav> 
                             
-                            <h1 class="mb-4 text-center" th:text="${user.getName()}"></h1>
+                            <h1>ユーザー詳細</h1>
                             
                             <div class="container mb-4">
 								<!-- ID -->
@@ -96,7 +96,7 @@
                                     </div>
                                 </div>
                                 <!-- 生年月日 -->
-                                <div class="row pb-2 mb-2 border-bottom">
+                                <div class="row pb-2 mb-4">
                                     <div class="col-4">
                                         <span class="fw-bold">生年月日</span>
                                     </div>

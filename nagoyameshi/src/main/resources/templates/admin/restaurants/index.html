@@ -8,22 +8,21 @@
 		<title>管理者用店舗一覧</title>
 	</head>
 	<body>
-		<div class="nagoyameshi-base-color">
+		<div class="nagoyameshi-wrapper">
 			<div th:replace="~{fragment :: header}"></div>
 			<main>
 				<div class="container">
 					
+					<h1 class="nagoyameshi-h1">管理者用店舗一覧</h1>
 					
-					<h1 class="text-center">管理者用店舗一覧</h1>
-					
-					<div class="d-flex justify-content-between align-items-end flex-wrap">
-                        <form method="get" th:action="@{/admin/restaurants}" class="mb-3">
+					<div class="nagoyameshi-flex-between">
+                        <form method="get" th:action="@{/admin/restaurants}" class="no-focus-outline">
                             <div class="input-group">
                                 <input type="text" class="form-control" name="keyword" th:value="${keyword}" placeholder="店名, 郵便番号, 住所, 電話番号">
                                 <button type="submit" class="btn text-white shadow-sm nagoyameshi-btn">検索</button> 
                             </div>               
                         </form>      
-                        <a th:href="@{/admin/restaurants/register}" class="btn text-white shadow-sm mb-3 nagoyameshi-btn">登録</a>
+                        <a th:href="@{/admin/restaurants/register}" class="btn text-white shadow-sm nagoyameshi-btn">登録</a>
                     </div>
                     <!-- リダイレクトメッセージ -->
                     <div th:if="${successMessage}" class="alert alert-info">
@@ -77,20 +76,20 @@
                     </table>
                     
                     <!-- ページネーション -->
-                    <div th:if="${restaurantPage.getTotalPages() > 1}" class="d-flex justify-content-center">
+                    <div th:if="${restaurantPage.getTotalPages() > 1}" class="nagoyameshi-pagination-box">
                         <nav aria-label="管理者用店舗一覧ページ">
                             <ul class="pagination">
                                 <li class="page-item">
                                     <span th:if="${restaurantPage.isFirst()}" class="page-link disabled">前</span>
-                                    <a th:unless="${restaurantPage.isFirst()}" th:href="@{/admin/restaurants(page = ${restaurantPage.getNumber() - 1})}" class="page-link">前</a>
+                                    <a th:unless="${restaurantPage.isFirst()}" th:href="@{/admin/restaurants(page = ${restaurantPage.getNumber() - 1})}" class="page-link pagination-color">前</a>
                                 </li>
                                 <li th:each="i : ${#numbers.sequence(0, restaurantPage.getTotalPages() - 1)}" class="page-item">
-                                    <span th:if="${i == restaurantPage.getNumber()}" class="page-link active" th:text="${i + 1}"></span>
-                                    <a th:unless="${i == restaurantPage.getNumber()}" th:href="@{/admin/restaurants(page = ${i})}" class="page-link" th:text="${i + 1}"></a>
+                                    <span th:if="${i == restaurantPage.getNumber()}" class="page-link pagination-color-active active" th:text="${i + 1}"></span>
+                                    <a th:unless="${i == restaurantPage.getNumber()}" th:href="@{/admin/restaurants(page = ${i})}" class="page-link pagination-color" th:text="${i + 1}"></a>
                                 </li>
                                 <li class="page-item">                        
                                     <span th:if="${restaurantPage.isLast()}" class="page-link disabled">次</span>
-                                    <a th:unless="${restaurantPage.isLast()}" th:href="@{/admin/restaurants(page = ${restaurantPage.getNumber() + 1})}" class="page-link">次</a>
+                                    <a th:unless="${restaurantPage.isLast()}" th:href="@{/admin/restaurants(page = ${restaurantPage.getNumber() + 1})}" class="page-link pagination-color">次</a>
                                 </li>
                             </ul>
                         </nav> 

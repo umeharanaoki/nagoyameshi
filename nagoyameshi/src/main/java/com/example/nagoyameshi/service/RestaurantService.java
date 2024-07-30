@@ -6,10 +6,13 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 import java.util.UUID;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.jpa.domain.Specification;
 import org.springframework.data.web.PageableDefault;
@@ -22,17 +25,22 @@ import com.example.nagoyameshi.entity.Restaurant;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
 import com.example.nagoyameshi.repository.CategoryRepository;
+import com.example.nagoyameshi.repository.CustomRestaurantRepositoryImpl;
 import com.example.nagoyameshi.repository.RestaurantRepository;
 
 @Service
 public class RestaurantService {
 	private final RestaurantRepository restaurantRepository;
 	private final CategoryRepository categoryRepository;
+	private final CustomRestaurantRepositoryImpl customRestaurantRepositoryImpl;
 	
-	public RestaurantService(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository) {
+	public RestaurantService(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, CustomRestaurantRepositoryImpl customRestaurantRepositoryImpl) {
 		this.restaurantRepository = restaurantRepository;
 		this.categoryRepository = categoryRepository;
+		this.customRestaurantRepositoryImpl = customRestaurantRepositoryImpl;
 	}
+	
+	// データベースに新規店舗を登録する処理
 	@Transactional
     public void create(RestaurantRegisterForm restaurantRegisterForm) {
         Restaurant restaurant = new Restaurant();
@@ -64,6 +72,7 @@ public class RestaurantService {
         restaurantRepository.save(restaurant);
     }
 	
+	// データベースに保存されている店舗情報を更新する処理
 	public void update(RestaurantEditForm restaurantEditForm) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantEditForm.getId());
 		MultipartFile imageFile = restaurantEditForm.getImageFile();
@@ -106,8 +115,10 @@ public class RestaurantService {
 	    return adminRestaurantPage;
 	}
 	
-	// 一般用店舗一覧ページのための検索機能
-	public Page<Restaurant> findRestaurants(String keyword, Integer minBudget, Integer maxBudget, Category category, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+	// 一般用店舗一覧ページのための検索・並び替え機能
+	public Page<Restaurant> findRestaurants(String keyword, Integer minBudget, Integer maxBudget, Category category, String order, Pageable pageable) {
+		Page<Restaurant> restaurantPage;
+		// 検索条件をspecに入れる
 		Specification<Restaurant> spec = Specification
 				// 店名とキーワードは同じ検索窓なので引数を同じにしている
 				.where(nameContains(keyword))
@@ -116,20 +127,30 @@ public class RestaurantService {
 				.and(maxBudgetLessThanEqual(maxBudget))
 				.and(categoryEqual(category));
 		
+		// 並び替え条件の指定
+		Sort sort = Sort.unsorted();
+		if("createdAtDesc".equals(order)) {
+			// 新着順
+			sort = Sort.by("createdAt").descending();
+			pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+			restaurantPage = restaurantRepository.findAll(spec, pageable);
+		} else if("evaluationDesc".equals(order)) {
+			// 評価順
+			restaurantPage = customRestaurantRepositoryImpl.findRestaurantsByCriteriaOrderByAverageEvaluation(keyword, minBudget, maxBudget, category, pageable);
+			System.out.println(pageable);
+		} else {
+			sort = Sort.by("createdAt").descending();
+			pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
+			restaurantPage = restaurantRepository.findAll(spec, pageable);
+		}
+		return restaurantPage;
+	}
 		
-		// Sortの設定
-//		Object sortOption;
-//		Sort sort = pageable.getSort().isSorted()
-//		        ? pageable.getSort()
-//		        : (sortOption.equals("score")
-//		            ? Sort.by(Sort.Direction.DESC, "reviews.evaluation")
-//		            : Sort.by(Sort.Direction.DESC, "updatedAt"));
+	// トップページに表示する店舗数の制限
+	public List<Restaurant> getTop6RestaurantsByAverageEvaluation() {
+		PageRequest pageRequest = PageRequest.of(0, 6);
 		
-        // PageableにSort情報を追加
-//        pageable = PageRequest.of(0, 10, sort);
-        
-	    Page<Restaurant> restaurantPage = restaurantRepository.findAll(spec, pageable);
-	    return restaurantPage;
+		return restaurantRepository.findTop6ByAverageEvaluation(pageRequest);
 	}
 	
     // UUIDを使って生成したファイル名を返す

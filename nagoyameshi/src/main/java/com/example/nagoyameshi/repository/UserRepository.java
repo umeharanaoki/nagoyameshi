@@ -1,5 +1,7 @@
 package com.example.nagoyameshi.repository;
 
+import java.util.List;
+
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -14,5 +16,6 @@ public interface UserRepository extends JpaRepository<User, Integer>, JpaSpecifi
 	public User findByEmail(String email);
 
 	public Page<User> findByNameLike(String string, Pageable pageable);
-
+	// プレミアムユーザーを探す
+	public List<User> findByRoleId(Integer role_id);
 }

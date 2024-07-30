@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html xmlns:th=”https://www.thymeleaf.org” xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment :: meta}"></div>
+		
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>予約一覧</title>
+	</head>
+	<body>
+		<div class="nagoyameshi-wrapper">
+			<div th:replace="~{fragment :: header}"></div>
+			<main>
+				<div class="container">
+					
+					<h1>予約一覧</h1>
+					
+					<!-- 予約完了後のメッセージ -->
+					<div th:if="${param.reserved}" class="alert alert-info">
+						予約が完了しました。
+					</div>
+                    
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th scope="col">店名</th>
+                                <th scope="col">来店日</th>
+                                <th scope="col">来店時間</th>
+                                <th scope="col">来店人数</th>
+                            </tr>
+                        </thead>   
+                        <tbody>                                                     
+                            <tr th:each="reservation : ${reservationPage}">
+                                <td th:text="${reservation.restaurant.getName()}"></td>
+                                <td th:text="${reservation.getVisitingDate()}"></td>
+                                <td th:text="${reservation.getVisitingTime()}"></td>
+                                <td th:text="${reservation.getNumberOfPeople()}"></td>
+                            </tr>                                      
+                        </tbody>
+                    </table>
+                    
+                    <!-- ページネーション -->
+                    <div th:if="${reservationPage.getTotalPages() > 1}" class="nagoyameshi-pagination-box">
+                        <nav aria-label="管理者用ユーザー一覧ページ">
+                            <ul class="pagination">
+                                <li class="page-item">
+                                    <span th:if="${reservationPage.isFirst()}" class="page-link disabled">前</span>
+                                    <a th:unless="${reservationPage.isFirst()}" th:href="@{/reservations(page = ${reservationPage.getNumber() - 1})}" class="page-link pagination-color">前</a>
+                                </li>
+                                <li th:each="i : ${#numbers.sequence(0, reservationPage.getTotalPages() - 1)}" class="page-item">
+                                    <span th:if="${i == reservationPage.getNumber()}" class="page-link pagination-color-active active" th:text="${i + 1}"></span>
+                                    <a th:unless="${i == reservationPage.getNumber()}" th:href="@{/reservations(page = ${i})}" class="page-link pagination-color" th:text="${i + 1}"></a>
+                                </li>
+                                <li class="page-item">                        
+                                    <span th:if="${reservationPage.isLast()}" class="page-link disabled">次</span>
+                                    <a th:unless="${reservationPage.isLast()}" th:href="@{/reservations(page = ${reservationPage.getNumber() + 1})}" class="page-link pagination-color">次</a>
+                                </li>
+                            </ul>
+                        </nav> 
+                    </div> 
+				</div>
+			</main>
+			<div th:replace="~{fragment :: footer}"></div>	
+		</div>
+		<div th:replace="~{fragment :: scripts}"></div>
+	</body>
+</html>

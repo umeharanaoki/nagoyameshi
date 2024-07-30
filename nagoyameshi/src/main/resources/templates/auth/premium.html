@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html xmlns:th=”https://www.thymeleaf.org” xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+	<head>
+		<div th:replace="~{fragment :: meta}"></div>
+		
+		<div th:replace="~{fragment :: styles}"></div>
+		
+		<title>プレミアムプラン紹介</title>
+	</head>
+	<body>
+		<div class="nagoyameshi-wrapper">
+			<div th:replace="~{fragment :: header}"></div>
+			<main>
+		        <h1>プレミアム会員特典</h1>
+				<div class="container nagoyamehi-container">
+                    <div class="row justify-content-center">
+		                <p class="text-center">月額300円でより便利で充実した飲食体験が可能になります。</p>
+                        <div class="row row-cols-2">
+							<div class="nagoyameshi-premium-flexbox">
+								<div class="nagoyameshi-premium-img-box">
+									<img th:src="@{/images/1.png}" class="nagoyameshi-premium-img">
+								</div>
+								<div class="nagoyameshi-premium-text-box">
+									<h5 class="nagoyameshi-premium-h5">詳細検索</h5>
+									<p class="nagoyameshi-premium-text">予算や営業時間での検索が可能になり、<br>希望の店を簡単に見つけることができます。</p>
+								</div>
+							</div>
+							<div class="nagoyameshi-premium-flexbox">
+								<div class="nagoyameshi-premium-img-box">
+									<img th:src="@{/images/2.png}" class="nagoyameshi-premium-img">
+								</div>
+								<div class="nagoyameshi-premium-text-box">
+									<h5>予約</h5>
+									<p class="nagoyameshi-premium-text">簡単かつ優先的に飲食店の予約ができ、<br>混雑時でも安心です。</p>
+								</div>
+							</div>
+							<div class="nagoyameshi-premium-flexbox">
+								<div class="nagoyameshi-premium-img-box">
+									<img th:src="@{/images/3.png}" class="nagoyameshi-premium-img">
+								</div>
+								<div class="nagoyameshi-premium-text-box">
+									<h5>レビューの投稿</h5>
+									<p class="nagoyameshi-premium-text">他のユーザーに自分の飲食体験をシェアでき、<br>コミュニティに参加できます。</p>
+								</div>
+							</div>
+							<div class="nagoyameshi-premium-flexbox">
+								<div class="nagoyameshi-premium-img-box">
+									<img th:src="@{/images/4.png}" class="nagoyameshi-premium-img">
+								</div>
+								<div class="nagoyameshi-premium-text-box">
+									<h5>お気に入り登録</h5>
+									<p class="nagoyameshi-premium-text">お気に入りのお店を保存し、<br>いつでもアクセスできるようになります。</p>
+								</div>
+							</div>
+                        </div>
+                        <div class="nagoyameshi-premium-btn-box">
+							<button id="paymentButton" class="btn nagoyameshi-btn">今すぐ始める</button>
+						</div>
+                    </div>
+				</div>
+			</main>
+			<div th:replace="~{fragment :: footer}"></div>	
+		</div>
+		<div th:replace="~{fragment :: scripts}"></div>
+		<!-- Stripe -->
+		<script src="https://js.stripe.com/v3"></script>
+		<script th:inline="javascript">
+			const sessionId = /*[[${sessionId}]]*/"sessionId";
+		</script>
+		<script th:src="@{/js/stripe.js}"></script>
+	</body>
+</html>

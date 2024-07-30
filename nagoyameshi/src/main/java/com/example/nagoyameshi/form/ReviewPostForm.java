@@ -14,9 +14,9 @@ public class ReviewPostForm {
 	
 	private MultipartFile imageFile;
 	
-	@NotNull(message = "評価を選択してください。")
+	@NotNull(message = "評価を入力してください。")
 	private Double evaluation;
 	
-	@NotBlank(message = "コメントを入力してください。")
+//	@NotBlank(message = "コメントを入力してください。")
 	private String comment;
 }

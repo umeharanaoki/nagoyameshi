@@ -8,85 +8,95 @@
 		<title>レビュー投稿</title>
 	</head>
 	<body>
-		<div class="nagoyameshi-base-color">
+		<div class="nagoyameshi-wrapper">
 			<div th:replace="~{fragment :: header}"></div>
 			<main>
+				<nav class="breadcrumb-box" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">   
+			 		<li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>                     
+                        <li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/restaurants/__${restaurant.getId()}__}" th:text="${restaurant.getName()}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">レビュー投稿</li>
+                    </ol>
+                </nav>
+				<h1 class="text-center"　th:text="${restaurant.getName()} + 'のレビュー投稿'"></h1>
+				
 				<div class="container">
+					<div class="row justify-content-center">
 					
-					<h1 class="text-center"　th:text="${restaurant.getName()} + 'のレビュー投稿'"></h1>
-	                
-					<!-- ReviewPostFormに情報を送信（post)-->
-	                <form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reviews/create}" th:object="${reviewPostForm}" enctype="multipart/form-data">
-						<!-- タイトル -->
-						<div class="row mb-3">
-							<!-- ラベル -->
-							<div class="col-md-5">
-								<label for="title" class="col-form-label text-md-left fw-bold">
-									<div class="d-flex align-items-center">
-										<span class="me-1">タイトル</span>
-									</div>
-								</label>
+						<!-- ReviewPostFormに情報を送信（post)-->
+		                <form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reviews/create}" th:object="${reviewPostForm}" enctype="multipart/form-data" class="col-md-8 col-10">
+							<!-- タイトル -->
+							<div class="row mb-3">
+								<!-- ラベル -->
+								<div class="col-md-5">
+									<label for="title" class="col-form-label text-md-left fw-bold">
+										<div class="d-flex align-items-center">
+											<span class="me-1">タイトル</span>
+											<span class="badge bg-danger">必須</span>
+										</div>
+									</label>
+								</div>
+								<!-- テキストボックス -->
+								<div class="col-md-7">
+									<div th:if="${#fields.hasErrors('title')}" class="text-danger small mb-2" th:errors="*{title}"></div>
+									<input type="text" class="form-control" th:field="*{title}" autocomplete="title">
+								</div>
 							</div>
-							<!-- テキストボックス -->
-							<div class="col-md-7">
-								<div th:if="${#fields.hasErrors('title')}" class="text-danger small mb-2" th:errors="*{title}"></div>
-								<input type="text" class="form-control" th:field="*{title}" autocomplete="title">
+								
+							<!-- 評価 -->
+							<div class="row mb-3">
+								<!-- ラベル -->
+								<div class="col-md-5">
+									<label for="evaluation" class="col-form-label text-md-left fw-bold">
+										<div class="d-flex align-items-center">
+											<span class="me-1">評価</span>
+											<span class="badge bg-danger">必須</span>
+										</div>
+									</label>
+								</div>
+								<!-- 入力フォーム -->
+								<div class="col-md-7">
+									<div th:if="${#fields.hasErrors('evaluation')}" class="text-danger small mb-2" th:errors="*{evaluation}"></div>
+									<!-- 小数点以下第一位まで表示 -->
+									<input type="number" step="0.1" min="1.0" max="5.0" id="reviewScoreInput" class="form-control" th:field="*{evaluation}">
+								</div>
 							</div>
-						</div>
 							
-						<!-- 画像 -->
-						<div class="row mb-3">
-                        	<div class="col-md-4">
-                            	<label for="imageFile" class="col-form-label text-md-left fw-bold">レビュー画像</label>
-                            </div>                                    
-                            <div class="col-md-8">
-                            	<div th:if="${#fields.hasErrors('imageFile')}" class="text-danger small mb-2" th:errors="*{imageFile}"></div>  
-                                    <input type="file" class="form-control" th:field="*{imageFile}">
-                            </div>
-                        </div>   
-                        <!-- 選択された画像の表示場所 -->
-                        <div class="row" id="imagePreview"></div>                                 
-                            
-						<!-- 評価 -->
-						<div class="row mb-3">
-							<!-- ラベル -->
-							<div class="col-md-5">
-								<label for="evaluation" class="col-form-label text-md-left fw-bold">
-									<div class="d-flex align-items-center">
-										<span class="me-1">評価</span>
-									</div>
-								</label>
+							<!-- コメント -->
+							<div class="row mb-3">
+								<!-- ラベル -->
+								<div class="col-md-5">
+									<label for="comment" class="col-form-label text-md-left fw-bold">
+										<div class="d-flex align-items-center">
+											<span class="me-1">コメント</span>
+										</div>
+									</label>
+								</div>
+								<!-- テキストエリア -->
+	                            <div class="col-md-7">                            
+	                        	    <textarea class="form-control" th:field="*{comment}" cols="30" rows="5"></textarea>
+	                            </div>
 							</div>
-							<!-- テキストボックス -->
-							<div class="col-md-7">
-								<div th:if="${#fields.hasErrors('evaluation')}" class="text-danger small mb-2" th:errors="*{evaluation}"></div>
-								<!-- ここをホバーに修正 -->
-								<input type="text" class="form-control" th:field="*{evaluation}">
+							
+							<!-- 画像 -->
+							<div class="row mb-3">
+	                        	<div class="col-md-5">
+	                            	<label for="imageFile" class="col-form-label text-md-left fw-bold">レビュー画像</label>
+	                            </div>                                    
+	                            <div class="col-md-7">
+	                                <input type="file" class="form-control" th:field="*{imageFile}">
+	                            </div>
+	                        </div>   
+	                        <!-- 選択された画像の表示場所 -->
+	                        <div class="row" id="imagePreview"></div> 
+							
+							<!-- ボタン -->
+							<div class="d-flex justify-content-center mt-2 mb-4">
+								<button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">登録</button>
 							</div>
-						</div>
-						
-						<!-- コメント -->
-						<div class="row mb-3">
-							<!-- ラベル -->
-							<div class="col-md-5">
-								<label for="comment" class="col-form-label text-md-left fw-bold">
-									<div class="d-flex align-items-center">
-										<span class="me-1">キーワード</span>
-									</div>
-								</label>
-							</div>
-							<!-- テキストエリア -->
-                            <div class="col-md-7">                            
-<!--                                <div th:if="${#fields.hasErrors('keyword')}" class="text-danger small mb-2" th:errors="*{keyword}"></div>                                        -->
-                        	    <textarea class="form-control" th:field="*{comment}" cols="30" rows="5"></textarea>
-                            </div>
-						</div>
-						
-						<!-- ボタン -->
-						<div class="d-flex justify-content-center my-4">
-							<button type="submit" class="btn text-white shadow-sm w-50 nagoyameshi-btn">登録</button>
-						</div>
-					</form>
+						</form>
+					</div>
 				</div>
 			</main>
 			
@@ -95,5 +105,6 @@
 		
 		<div th:replace="~{fragment :: scripts}"></div>
 		<script th:src="@{/js/preview.js}"></script>
+		<script th:src="@{/js/review-score-input.js}"></script>
 	</body>
 </html>

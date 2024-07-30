@@ -8,87 +8,103 @@
 		<title>レビュー一覧</title>
 	</head>
 	<body>
-		<div class="nagoyameshi-base-color">
+		<div class="nagoyameshi-wrapper">
 			<div th:replace="~{fragment :: header}"></div>
 			<main>
+				<nav class="breadcrumb-box" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
+                    <ol class="breadcrumb mb-0">                        
+                        <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
+                        <li class="breadcrumb-item"><a th:href="@{/restaurants/__${restaurant.getId()}__}" th:text="${restaurant.getName()}"></a></li>
+                        <li class="breadcrumb-item active" aria-current="page">レビュー一覧</li>
+                    </ol>
+                </nav>
+                <h1 class="mb-4 text-center" th:text="${restaurant.getName()} + 'のレビュー一覧'"></h1>
 				<div class="container">
-					
-					
-					<h1 class="text-center">レビュー一覧</h1>
-					
-                    <div class="row justify-content-center">
-                        <div class="col-xxl-9 col-xl-10 col-lg-11">
-                            <nav class="mb-4" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-                                <ol class="breadcrumb mb-0">                        
-                                    <li class="breadcrumb-item"><a th:href="@{/}">ホーム</a></li>
-                                    <li class="breadcrumb-item"><a th:href="@{/restaurants}">店舗一覧</a></li>
-                                    <li class="breadcrumb-item"><a th:href="@{/restaurants/__${restaurant.getId()}__}">店舗詳細</a></li>
-                                    <li class="breadcrumb-item active" aria-current="page">レビュー一覧</li>
-                                </ol>
-                            </nav> 
-                            
-                            <h1 class="mb-4 text-center" th:text="${restaurant.getName()} + 'のレビュー一覧'"></h1>
-                            
-                            <div class="container">
-								<div class="row">
-									<!-- レビューをカード表示する -->
-									<div th:each="review : ${reviewPage}" class="col-md-6 mb-4">
-										<div class="card">
-											<div class="row">
-												<div class="col-md-9">
-													<div class="card-body">
-														<h3 class="card-title mb-3" th:text="${review.getTitle()}"></h3>
-														
-														<hr class="mb-3">
-														
-														<p class="card-text mb-5">
-															<span th:text="${review.getComment()}"></span>
-														</p>
-														
-														<p class="card-text mb-2">
-															<span th:text="${review.getEvaluation()}"></span>
-														</p>
-														<p class="card-text mb-2">
-															<span th:text="${review.getCreatedAt()}"></span>
-														</p>
-														
-														<p class="card-text">
-															<span th:text="${review.user.getName()}"></span>
-														</p>
-													</div>
+					<div class="row row-cols-2 nagoyameshi-review-box">
+					    <div th:each="review : ${reviewPage}">
+					        <div class="card nagoyameshi-review-card d-flex flex-row">
+					            <div class="col-7 d-flex flex-column">
+					                <div class="card-body flex-grow-1">
+										<!-- タイトル -->
+					                    <p class="card-title nagoyameshi-review-title" th:text="${review.getTitle()}"></p>
+					                    <hr class="nagoyameshi-review-hr">
+					                    <!-- コメント -->
+					                    <p class="card-text nagoyameshi-review-text truncate-multiline">
+					                        <span th:text="${review.getComment()}"></span>
+					                    </p>
+					                    <!-- 評価 -->
+					                    <p class="card-text nagoyameshi-review-text">
+					                        <span class="rate-wrap">
+					                            <span class="rate-review" th:style="'--score: ' + ${review.getEvaluation()}"></span>
+					                            <span class="review-score-num-sm" th:text="${review.getEvaluation()}"></span>
+					                        </span>
+					                    </p>
+					                    <!-- 投稿日・リンク -->
+					                    <div class="nagoyameshi-review-bottom-box">
+								            <p class="card-text nagoyameshi-review-text m-0">
+								                <span th:text="${#dates.format(review.getCreatedAt(), 'yyyy/MM/dd')}"></span>
+								            </p>
+								            <!-- ログインしている場合表示 -->
+								            <div sec:authorize="isAuthenticated()">
+												<!-- userがnullではなく、ログイン者のuserIDと投稿者のuserIDが同じ時だけ表示する -->
+									            <div th:if="${user != null and #authentication.principal.user.id == review.user.id}">
+													<!-- 編集リンク -->
+													<a class="nagoyameshi-review-text" th:href="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/edit}">編集</a>
+													<!-- 削除リンク -->
+													<a href="#" class="nagoyameshi-review-text nagoyameshi-link-danger" data-bs-toggle="modal" th:data-bs-target="${'#deleteReviewModal' + review.getId()}">削除</a>
 												</div>
-												<div class="col-md-3">
-													<img th:if="${review.getImageName()}" th:src="@{/storage/__${review.getImageName()}__}" class="card-img-top" alt="店舗画像">                                                     
-                                                	<img th:unless="${review.getImageName()}" th:src="@{/images/noImage.png}" class="card-img-top" alt="NO IMAGE">
-												</div>
+												<!-- 削除用モーダル -->
+												<div class="modal fade" th:id="${'deleteReviewModal' + review.getId()}" tabindex="-1" th:aria-labelledby="${'deleteReviewModalLabel' + review.getId()}">
+								                    <div class="modal-dialog">
+								                        <div class="modal-content">
+								                            <div class="modal-header bg-danger">
+								                                <h5 class="modal-title text-white" th:id="${'deleteReviewModalLabel' + review.getId()}">削除確認</h5>
+								                                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="閉じる"></button>
+								                            </div>
+								                            <div class="modal-body">
+															<p>レビューを削除してよろしいですか？</p>
+														</div>
+								                            <div class="modal-footer">
+								                                <form method="post" th:action="@{/restaurants/__${restaurant.getId()}__/reviews/__${review.getId()}__/delete}">
+								                                    <button type="submit" class="btn nagoyameshi-btn-danger text-white shadow-sm">削除</button>
+								                                </form>
+								                                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">キャンセル</button>
+								                            </div>
+								                        </div>
+								                    </div>
+								                </div>
 											</div>
 										</div>
-									</div>
-								</div>
-							</div>
-							
-							<!-- ページネーション -->
-							<div th:if="${reviewPage.getTotalPages() > 1}" class="d-flex justify-content-center">
-								<nav aria-label="レビュー一覧ページ">
-									<ul class="pagination">
-										<li class="page-item">
-											<span th:if="${reviewPage.isFirst()}" class="page-link disabled">前</span>
-											<a th:unless="${reviewPage.isFirst()}" th:href="@{/restaurants/__${restaurant.getId()}__/reviews(page = ${reviewPage.getNumber() - 1})}" class="page-link samuraitravel-page-link">前</a>
-										</li>
-										<li th:each="i : ${#numbers.sequence(0, reviewPage.getTotalPages() - 1)}" class="page-item">
-											<span th:if="${i == reviewPage.getNumber()}" class="page-link active samuraitravel-active" th:text="${i + 1}"></span>
-											<a th:unless="${i == reviewPage.getNumber()}" th:href="@{/restaurants/__${restaurant.getId()}__/reviews(page = ${i})}" class="page-link samuraitravel-page-link" th:text="${i + 1}"></a>
-										</li>
-										<li class="page-item">                        
-           							    	<span th:if="${reviewPage.isLast()}" class="page-link disabled">次</span>
-               								<a th:unless="${reviewPage.isLast()}" th:href="@{/restaurants/__${restaurant.getId()}__/reviews(page = ${reviewPage.getNumber() + 1})}" class="page-link samuraitravel-page-link">次</a>
-        							    </li>
-									</ul>
-								</nav>
-								
-							</div>
-                        </div>
-                    </div>
+					                </div>
+					            </div>
+					            <div class="col-5 d-flex align-items-center justify-content-center">
+					                <img th:if="${review.getImageName()}" th:src="@{/storage/__${review.getImageName()}__}" class="nagoyameshi-review-card-right-img" alt="店舗画像">                                                     
+					                <img th:unless="${review.getImageName()}" th:src="@{/images/noImage.png}" class="nagoyameshi-review-card-right-img" alt="NO IMAGE">
+					            </div>
+					        </div>
+					    </div>
+					</div>
+
+					<!-- ページネーション -->
+					<div th:if="${reviewPage.getTotalPages() > 1}" class="nagoyameshi-pagination-box">
+						<nav aria-label="レビュー一覧ページ">
+							<ul class="pagination">
+								<li class="page-item">
+									<span th:if="${reviewPage.isFirst()}" class="page-link disabled">前</span>
+									<a th:unless="${reviewPage.isFirst()}" th:href="@{/restaurants/__${restaurant.getId()}__/reviews(page = ${reviewPage.getNumber() - 1})}" class="page-link pagination-color">前</a>
+								</li>
+								<li th:each="i : ${#numbers.sequence(0, reviewPage.getTotalPages() - 1)}" class="page-item">
+									<span th:if="${i == reviewPage.getNumber()}" class="page-link active pagination-color-active" th:text="${i + 1}"></span>
+									<a th:unless="${i == reviewPage.getNumber()}" th:href="@{/restaurants/__${restaurant.getId()}__/reviews(page = ${i})}" class="page-link pagination-color" th:text="${i + 1}"></a>
+								</li>
+								<li class="page-item">                        
+           					    	<span th:if="${reviewPage.isLast()}" class="page-link disabled">次</span>
+               						<a th:unless="${reviewPage.isLast()}" th:href="@{/restaurants/__${restaurant.getId()}__/reviews(page = ${reviewPage.getNumber() + 1})}" class="page-link pagination-color">次</a>
+        					    </li>
+							</ul>
+						</nav>
+					</div>
 				</div>
 			</main>
 			<div th:replace="~{fragment :: footer}"></div>	

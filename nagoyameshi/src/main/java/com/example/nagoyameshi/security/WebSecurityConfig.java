@@ -16,11 +16,12 @@ public class WebSecurityConfig {
 	
 	// 誰にどのページへのアクセスを許可するかを設定
 	@Bean
-	public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
+	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/restaurants", "/restaurants/{id}").permitAll() // 全てのユーザーにアクセスを許可するURL
+				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/restaurants", "/restaurants/{id}", "/restaurants/{id}/reviews", "/stripe/webhook").permitAll() // 全てのユーザーにアクセスを許可するURL
 				.requestMatchers("/admin/**").hasRole("ADMIN") // 管理者にのみアクセスを許可するURL
+//				.requestMatchers("/**/reviews/post", "/**/reviews/edit", "/favorites", "/reservations").hasRole("ROLE_GENERAL_PREMIUM")
 				.anyRequest().authenticated() // 上記以外のURLはログインが必要（会員または管理者のどちらでもOK）
 			)
 			.formLogin((form) -> form
@@ -34,7 +35,9 @@ public class WebSecurityConfig {
 				.logoutSuccessUrl("/?loggedOut") // ログアウト時のリダイレクト先URL
 				.permitAll()
 			)
-			.csrf().ignoringRequestMatchers("/stripe/webhook");
+			.csrf((csrf) -> csrf
+				.ignoringRequestMatchers("/stripe/webhook")
+			);
 		
 		return http.build();
 	}

@@ -4,6 +4,7 @@ package com.example.nagoyameshi.controller;
 import java.util.List;
 
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort.Direction;
 import org.springframework.data.web.PageableDefault;
@@ -21,11 +22,13 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyameshi.entity.Category;
 import com.example.nagoyameshi.entity.Restaurant;
+import com.example.nagoyameshi.entity.Review;
 import com.example.nagoyameshi.form.RestaurantEditForm;
 import com.example.nagoyameshi.form.RestaurantRegisterForm;
 import com.example.nagoyameshi.repository.CategoryRepository;
 import com.example.nagoyameshi.repository.FavoriteRepository;
 import com.example.nagoyameshi.repository.RestaurantRepository;
+import com.example.nagoyameshi.repository.ReviewRepository;
 import com.example.nagoyameshi.service.RestaurantService;
 
 @Controller
@@ -35,12 +38,14 @@ public class AdminRestaurantController {
 	private final CategoryRepository categoryRepository;
 	private final RestaurantService restaurantService;
 	private final FavoriteRepository favoriteRepository;
+	private final ReviewRepository reviewRepository;
 	
-	AdminRestaurantController(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, RestaurantService restaurantService, FavoriteRepository favoriteRepository) {
+	AdminRestaurantController(RestaurantRepository restaurantRepository, CategoryRepository categoryRepository, RestaurantService restaurantService, FavoriteRepository favoriteRepository, ReviewRepository reviewRepository) {
 		this.restaurantRepository = restaurantRepository;
 		this.categoryRepository = categoryRepository;
 		this.restaurantService = restaurantService;
 		this.favoriteRepository = favoriteRepository;
+		this.reviewRepository = reviewRepository;
 	}
 	
 	@GetMapping
@@ -53,30 +58,35 @@ public class AdminRestaurantController {
 		return "admin/restaurants/index";
 	}
 	
+	// 管理者用店舗詳細ページ
 	@GetMapping("/{restaurant_id}")
 	public String show(Model model, @PathVariable(name = "restaurant_id") Integer restaurantId) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantId);
 		List<Category> category = categoryRepository.findAll();
 		Integer favoriteUsers = favoriteRepository.countFavoriteUsersByRestaurantId(restaurantId);
+		// 最新のレビューを2件表示する
+		List<Review> reviews = reviewRepository.findByRestaurantIdAndHiddenFalseOrderByCreatedAtDesc(restaurantId, PageRequest.of(0, 2));
 		
 		model.addAttribute("restaurant", restaurant);
 		model.addAttribute("category", category);
 		model.addAttribute("favoriteUsers", favoriteUsers);
+		model.addAttribute("reviews", reviews);
 		
 		return "admin/restaurants/show";
 	}
 	
 	@GetMapping("/register")
 	public String register(Model model) {
-		List<Category> category = categoryRepository.findAll();
 		model.addAttribute("restaurantRegisterForm", new RestaurantRegisterForm());
-		model.addAttribute("categories", category);
+		addCategoryListToModel(model);
 		return "admin/restaurants/register";
 	}
 	
 	@PostMapping("/create")
-	public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public String create(@ModelAttribute @Validated RestaurantRegisterForm restaurantRegisterForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 		if (bindingResult.hasErrors()) {
+			// バリデーションエラー時にもカテゴリリストを渡す
+			addCategoryListToModel(model);
             return "admin/restaurants/register";
         }
         
@@ -101,9 +111,11 @@ public class AdminRestaurantController {
 	}
 	
 	@PostMapping("/{restaurant_id}/update")
-	public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes) {
+	public String update(@ModelAttribute @Validated RestaurantEditForm restaurantEditForm, BindingResult bindingResult, RedirectAttributes redirectAttributes, Model model) {
 		// エラーがないか確認
 		if(bindingResult.hasErrors()) {
+			// バリデーションエラー時にもカテゴリリストを渡す
+			addCategoryListToModel(model);
 			return "admin/restaurants/edit";
 		}
 		
@@ -121,5 +133,11 @@ public class AdminRestaurantController {
 		redirectAttributes.addFlashAttribute("successMessage", "店舗を削除しました。");
 		
 		return "redirect:/admin/restaurants";
+	}
+	
+	// カテゴリリスト作成用の共通メソッド
+	private void addCategoryListToModel(Model model) {
+		List<Category> categories = categoryRepository.findAll();
+		model.addAttribute("categories", categories);
 	}
 }

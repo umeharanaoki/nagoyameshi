@@ -1,6 +1,7 @@
 package com.example.nagoyameshi.entity;
 
 import java.sql.Timestamp;
+import java.time.LocalDate;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -37,7 +38,7 @@ public class User {
 	private String phoneNumber;
 	
 	@Column(name = "birthday")
-	private String birthday;
+	private LocalDate birthday;
 	
 	@Column(name = "email")
 	private String email;
@@ -47,8 +48,9 @@ public class User {
 	
 	@ManyToOne
 	@JoinColumn(name = "role_id")
-	private Role role;   
+	private Role role;
 	
+	// メール認証したか
 	@Column(name = "enabled")
 	private Boolean enabled;
 	

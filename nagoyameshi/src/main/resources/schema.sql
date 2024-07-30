@@ -64,6 +64,7 @@ CREATE TABLE IF NOT EXISTS reviews(
 	image_name VARCHAR(255),
 	evaluation VARCHAR(50) NOT NULL,
     comment VARCHAR(255) NOT NULL,
+    hidden TINYINT NOT NULL,
     created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
     updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,    
     FOREIGN KEY (restaurant_id) REFERENCES restaurants (id),
@@ -74,7 +75,6 @@ CREATE TABLE IF NOT EXISTS reservations(
 	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
 	restaurant_id INT NOT NULL,
 	user_id INT NOT NULL,
-	image_name VARCHAR(255),
 	visiting_date DATE NOT NULL,
 	visiting_time TIME NOT NULL,
 	number_of_people INT NOT NULL,
@@ -94,4 +94,23 @@ CREATE TABLE IF NOT EXISTS favorites(
     FOREIGN KEY (user_id) REFERENCES users (id)
 ); 
 
-	
+CREATE TABLE IF NOT EXISTS subscriptions (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	user_id INT NOT NULL,
+	join_date DATE NOT NULL,
+    next_billing_date DATE NOT NULL,
+    cancellation_date DATE,
+    created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
+
+CREATE TABLE IF NOT EXISTS payments (
+	id INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+	user_id INT NOT NULL,
+	payment_date DATE NOT NULL,
+	amount_of_payment INT NOT NULL,
+	payment_status VARCHAR(50) NOT NULL,
+	created_at DATETIME NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users (id)
+);
