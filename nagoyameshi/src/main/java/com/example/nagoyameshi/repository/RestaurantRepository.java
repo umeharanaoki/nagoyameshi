@@ -19,12 +19,13 @@ public interface RestaurantRepository extends JpaRepository<Restaurant, Integer>
 	@Query("SELECT r FROM Restaurant r LEFT JOIN r.reviews rev GROUP BY r.id ORDER BY AVG(rev.evaluation) DESC")
 	List<Restaurant> findTop6ByAverageEvaluation(Pageable pageable);
 	
-	// レストランをレビューの平均点の高い順にリスト化
-//	@Query("SELECT r FROM Restaurant r LEFT JOIN r.reviews rev GROUP BY r.id ORDER BY AVG(rev.evaluation) DESC")
-//	Page<Restaurant> findAllByOrderByAverageEvaluationDescPage(Pageable pageable);
 	
 	// カテゴリIDで検索してカテゴリIDを未分類の者に変更する（カテゴリ削除処理用）
 	@Modifying
 	@Query("UPDATE Restaurant r SET r.category.id = :unclassifiedCategoryId WHERE r.category.id = :categoryId")
 	void updateCategoryToUnclassified(@Param("categoryId") Integer categoryId, @Param("unclassifiedCategoryId") Integer unclassifiedCategoryId);
 }
+
+// レストランをレビューの平均点の高い順にリスト化
+//	@Query("SELECT r FROM Restaurant r LEFT JOIN r.reviews rev GROUP BY r.id ORDER BY AVG(rev.evaluation) DESC")
+//	Page<Restaurant> findAllByOrderByAverageEvaluationDescPage(Pageable pageable);
