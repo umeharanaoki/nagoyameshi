@@ -3,6 +3,7 @@ package com.example.nagoyameshi.security;
 import java.util.ArrayList;
 import java.util.Collection;
 
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -22,6 +23,7 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
     
     @Override
+    @Cacheable(value = "usersCache", key = "#email")
     public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {  
         try {
             User user = userRepository.findByEmail(email);
