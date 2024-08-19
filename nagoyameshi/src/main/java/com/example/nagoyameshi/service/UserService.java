@@ -196,4 +196,8 @@ public class UserService {
         }
     }
     
+    public boolean isUserPremium(User user) {
+    	return user.getRole().getId() == 2;
+    }
+    
 }

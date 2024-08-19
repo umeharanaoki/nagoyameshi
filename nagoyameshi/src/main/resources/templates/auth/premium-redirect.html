@@ -22,5 +22,26 @@
 			<div th:replace="~{fragment :: footer}"></div>	
 		</div>
 		<div th:replace="~{fragment :: scripts}"></div>
+		<script>
+			function checkPremiumStatus() {
+			  fetch('/api/user-status')  // バックエンドのAPIエンドポイントにリクエスト
+			    .then(response => {
+			      if (!response.ok) {
+			        throw new Error('Network response was not ok');
+			      }
+			      return response.json();
+			    })
+			    .then(data => {
+			      if (data.isPremium) {
+			        // ユーザーがプレミアムステータスの場合、ページをリロード
+			        location.reload();
+			      }
+			    })
+			    .catch(error => console.error('Error fetching premium status:', error));
+			}
+			
+			// 10秒ごとにステータスを確認
+			setInterval(checkPremiumStatus, 5000);
+		</script>
 	</body>
 </html>

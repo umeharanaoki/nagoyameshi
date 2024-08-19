@@ -100,4 +100,23 @@ public class UserController {
         
         return "redirect:/user";
 	}
+	
+	@GetMapping("/api/user-status")
+	public UserStatusResponse getUserStatus(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl) {
+		User user = userDetailsImpl.getUser();
+		boolean isPremium = userService.isUserPremium(user);
+		
+		return new UserStatusResponse(isPremium);
+	}
+	
+	public static class UserStatusResponse {
+		private boolean isPremium;
+		
+		public UserStatusResponse(boolean isPremium) {
+			this.isPremium = isPremium;
+		}
+		public boolean isPremium() {
+			return isPremium;
+		}
+	}
 }
