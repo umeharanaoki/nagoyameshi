@@ -21,6 +21,7 @@ import com.example.nagoyameshi.entity.Role;
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.SignupForm;
 import com.example.nagoyameshi.form.UserEditForm;
+import com.example.nagoyameshi.form.UserPasswordForm;
 import com.example.nagoyameshi.repository.RoleRepository;
 import com.example.nagoyameshi.repository.UserRepository;
 
@@ -41,7 +42,6 @@ public class UserService {
     public User create(SignupForm signupForm) {
         User user = new User();
         Role role = roleRepository.findByName("ROLE_GENERAL_FREE");
-//        String birthday = signupForm.getBirthday().equals("") ? null : signupForm.getBirthday();
         
         user.setName(signupForm.getName());
         user.setFurigana(signupForm.getFurigana());
@@ -58,6 +58,7 @@ public class UserService {
         return userRepository.save(user);
     }    
     
+    // ユーザー情報の更新
     @Transactional
     public void update(UserEditForm userEditForm) {
     	User user = userRepository.getReferenceById(userEditForm.getId());
@@ -71,6 +72,14 @@ public class UserService {
         user.setEmail(userEditForm.getEmail());      
         
         userRepository.save(user);
+    }
+    
+    // パスワードを更新
+    @Transactional
+    public void updatePass(User user, UserPasswordForm userPasswordForm) {
+    	user.setPassword(passwordEncoder.encode(userPasswordForm.getNewPassword()));
+    	
+    	userRepository.save(user);
     }
     
     // プレミアムプラン加入
@@ -103,9 +112,14 @@ public class UserService {
         return user != null;
     }  
     
-    // パスワードとパスワード（確認用）の入力値が一致するかどうかをチェックする
+    // 2つのパスワードの入力値が一致するかどうかをチェックする
     public boolean isSamePassword(String password, String passwordConfirmation) {
         return password.equals(passwordConfirmation);
+    }
+    
+    // 入力された生のパスワードとエンコードされたパスワードを比較する
+    public boolean isSamePasswordEncode(String rawPassword, String encodePassword) {
+    	return passwordEncoder.matches(rawPassword, encodePassword);
     }
     
     // ユーザーを有効にする

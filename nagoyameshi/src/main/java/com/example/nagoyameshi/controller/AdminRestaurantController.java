@@ -91,7 +91,7 @@ public class AdminRestaurantController {
         }
         
         restaurantService.create(restaurantRegisterForm);
-        redirectAttributes.addFlashAttribute("successMessage", "民宿を登録しました。");    
+        redirectAttributes.addFlashAttribute("successMessage", "店舗情報を登録しました。");    
         
         return "redirect:/admin/restaurants";
 	}
@@ -119,7 +119,7 @@ public class AdminRestaurantController {
 			return "admin/restaurants/edit";
 		}
 		
-		//　エラーがない場合、UserServiceのupdateメソッドにFormを渡して更新処理をする
+		// エラーがない場合、UserServiceのupdateメソッドにFormを渡して更新処理をする
 		restaurantService.update(restaurantEditForm);
 		redirectAttributes.addFlashAttribute("successMessage", "店舗情報を更新しました。");
 		
@@ -130,7 +130,7 @@ public class AdminRestaurantController {
 	public String delete(@PathVariable(name = "restaurant_id") Integer restaurantId, RedirectAttributes redirectAttributes) {
 		restaurantRepository.deleteById(restaurantId);
 		
-		redirectAttributes.addFlashAttribute("successMessage", "店舗を削除しました。");
+		redirectAttributes.addFlashAttribute("successMessage", "店舗情報を削除しました。");
 		
 		return "redirect:/admin/restaurants";
 	}

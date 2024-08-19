@@ -111,12 +111,116 @@
 									<label for="" class="col-form-label text-md-left fw-bold">営業時間</label>
 								</div>
 								<!-- テキストボックス -->
-								<div class="col-md-7 nagoyameshi-form-inline">
-	<!--								<div th:if="${#fields.hasErrors('openingTime')}" class="text-danger small mb-2" th:errors="*{openingTime}"></div> -->
-									<input type="text" class="form-control" th:field="*{openingTime}" placeholder="17:00">
-									<span class="form-between">～</span>
-	<!--								<div th:if="${#fields.hasErrors('closingTime')}" class="text-danger small mb-2" th:errors="*{closingTime}"></div> -->
-									<input type="text" class="form-control" th:field="*{closingTime}" placeholder="23:00">
+								<div class="col-md-7">
+									<div th:if="${#fields.hasErrors('openingTime')}" class="text-danger small mb-2" th:errors="*{openingTime}"></div> 
+									<div th:if="${#fields.hasErrors('closingTime')}" class="text-danger small mb-2" th:errors="*{closingTime}"></div> 
+									<div class="nagoyameshi-form-inline">
+										<select class="form-control form-select nagoyameshi-select" th:field="*{openingTime}" required>
+											<option value="">開始時刻</option>
+						                    <!-- 30分刻みの時間を追加 -->
+						                    <option value="00:00">00:00</option>
+						                    <option value="00:30">00:30</option>
+						                    <option value="01:00">01:00</option>
+						                    <option value="01:30">01:30</option>
+						                    <option value="02:00">02:00</option>
+						                    <option value="02:30">02:30</option>
+						                    <option value="03:00">03:00</option>
+						                    <option value="03:30">03:30</option>
+						                    <option value="04:00">04:00</option>
+						                    <option value="04:30">04:30</option>
+						                    <option value="05:00">05:00</option>
+						                    <option value="05:30">05:30</option>
+						                    <option value="06:00">06:00</option>
+						                    <option value="06:30">06:30</option>
+						                    <option value="07:00">07:00</option>
+						                    <option value="07:30">07:30</option>
+						                    <option value="08:00">08:00</option>
+						                    <option value="08:30">08:30</option>
+						                    <option value="09:00">09:00</option>
+						                    <option value="09:30">09:30</option>
+						                    <option value="10:00">10:00</option>
+						                    <option value="10:30">10:30</option>
+						                    <option value="11:00">11:00</option>
+						                    <option value="11:30">11:30</option>
+						                    <option value="12:00">12:00</option>
+						                    <option value="12:30">12:30</option>
+						                    <option value="13:00">13:00</option>
+						                    <option value="13:30">13:30</option>
+						                    <option value="14:00">14:00</option>
+						                    <option value="14:30">14:30</option>
+						                    <option value="15:00">15:00</option>
+						                    <option value="15:30">15:30</option>
+						                    <option value="16:00">16:00</option>
+						                    <option value="16:30">16:30</option>
+						                    <option value="17:00">17:00</option>
+						                    <option value="17:30">17:30</option>
+						                    <option value="18:00">18:00</option>
+						                    <option value="18:30">18:30</option>
+						                    <option value="19:00">19:00</option>
+						                    <option value="19:30">19:30</option>
+						                    <option value="20:00">20:00</option>
+						                    <option value="20:30">20:30</option>
+						                    <option value="21:00">21:00</option>
+						                    <option value="21:30">21:30</option>
+						                    <option value="22:00">22:00</option>
+						                    <option value="22:30">22:30</option>
+						                    <option value="23:00">23:00</option>
+						                    <option value="23:30">23:30</option>
+						                </select>
+										<span class="form-between">～</span>
+										<select class="form-control form-select nagoyameshi-select" th:field="*{closingTime}" required>
+											<option value="">終了時刻</option>
+						                    <!-- 30分刻みの時間を追加 -->
+						                    <option value="00:00">00:00</option>
+						                    <option value="00:30">00:30</option>
+						                    <option value="01:00">01:00</option>
+						                    <option value="01:30">01:30</option>
+						                    <option value="02:00">02:00</option>
+						                    <option value="02:30">02:30</option>
+						                    <option value="03:00">03:00</option>
+						                    <option value="03:30">03:30</option>
+						                    <option value="04:00">04:00</option>
+						                    <option value="04:30">04:30</option>
+						                    <option value="05:00">05:00</option>
+						                    <option value="05:30">05:30</option>
+						                    <option value="06:00">06:00</option>
+						                    <option value="06:30">06:30</option>
+						                    <option value="07:00">07:00</option>
+						                    <option value="07:30">07:30</option>
+						                    <option value="08:00">08:00</option>
+						                    <option value="08:30">08:30</option>
+						                    <option value="09:00">09:00</option>
+						                    <option value="09:30">09:30</option>
+						                    <option value="10:00">10:00</option>
+						                    <option value="10:30">10:30</option>
+						                    <option value="11:00">11:00</option>
+						                    <option value="11:30">11:30</option>
+						                    <option value="12:00">12:00</option>
+						                    <option value="12:30">12:30</option>
+						                    <option value="13:00">13:00</option>
+						                    <option value="13:30">13:30</option>
+						                    <option value="14:00">14:00</option>
+						                    <option value="14:30">14:30</option>
+						                    <option value="15:00">15:00</option>
+						                    <option value="15:30">15:30</option>
+						                    <option value="16:00">16:00</option>
+						                    <option value="16:30">16:30</option>
+						                    <option value="17:00">17:00</option>
+						                    <option value="17:30">17:30</option>
+						                    <option value="18:00">18:00</option>
+						                    <option value="18:30">18:30</option>
+						                    <option value="19:00">19:00</option>
+						                    <option value="19:30">19:30</option>
+						                    <option value="20:00">20:00</option>
+						                    <option value="20:30">20:30</option>
+						                    <option value="21:00">21:00</option>
+						                    <option value="21:30">21:30</option>
+						                    <option value="22:00">22:00</option>
+						                    <option value="22:30">22:30</option>
+						                    <option value="23:00">23:00</option>
+						                    <option value="23:30">23:30</option>
+						                </select>
+									</div>
 								</div>
 							</div>
 							<!-- 予算 -->
@@ -130,13 +234,44 @@
 									</label>
 								</div>
 								<!-- テキストボックス -->
-								<div class="col-md-7 nagoyameshi-form-inline">
+								<div class="col-md-7">
 									<div th:if="${#fields.hasErrors('minBudget')}" class="text-danger small mb-2" th:errors="*{minBudget}"></div>
-									<input type="number" class="form-control" th:field="*{minBudget}" placeholder="3,000">
-									<span class="form-between">～</span>
 									<div th:if="${#fields.hasErrors('maxBudget')}" class="text-danger small mb-2" th:errors="*{maxBudget}"></div>
-									<input type="number" class="form-control" th:field="*{maxBudget}" placeholder="4,000">
-									<span>円</span>
+									<div class="nagoyameshi-form-inline">
+										<select class="form-control form-select nagoyameshi-select flex-grow-1" th:field="*{minBudget}" required>
+											<option value="">下限を選択</option>
+											<option value="1000">&yen;1,000</option>
+											<option value="2000">&yen;2,000</option>
+											<option value="3000">&yen;3,000</option>
+											<option value="4000">&yen;4,000</option>
+											<option value="5000">&yen;5,000</option>
+											<option value="6000">&yen;6,000</option>
+											<option value="7000">&yen;7,000</option>
+											<option value="8000">&yen;8,000</option>
+											<option value="9000">&yen;9,000</option>
+											<option value="10000">&yen;10,000</option>
+											<option value="20000">&yen;20,000</option>
+											<option value="50000">&yen;50,000</option>
+											<option value="100000">&yen;100,000</option>
+										</select>
+										<span class="form-between">～</span>
+										<select class="form-control form-select nagoyameshi-select flex-grow-1" th:field="*{maxBudget}" required>
+											<option value="">上限を選択</option>
+											<option value="1000">&yen;1,000</option>
+											<option value="2000">&yen;2,000</option>
+											<option value="3000">&yen;3,000</option>
+											<option value="4000">&yen;4,000</option>
+											<option value="5000">&yen;5,000</option>
+											<option value="6000">&yen;6,000</option>
+											<option value="7000">&yen;7,000</option>
+											<option value="8000">&yen;8,000</option>
+											<option value="9000">&yen;9,000</option>
+											<option value="10000">&yen;10,000</option>
+											<option value="20000">&yen;20,000</option>
+											<option value="50000">&yen;50,000</option>
+											<option value="100000">&yen;100,000</option>
+										</select>
+									</div>
 								</div>
 							</div>
 							
@@ -166,7 +301,7 @@
 								<!-- テキストボックス -->
 								<div class="col-md-7">
 									<div th:if="${#fields.hasErrors('seatingCapacity')}" class="text-danger small mb-2" th:errors="*{seatingCapacity}"></div>
-									<input type="text" class="form-control" th:field="*{seatingCapacity}">
+									<input type="number" class="form-control" min="1" th:field="*{seatingCapacity}" placeholder="20">
 								</div>
 							</div>
 							<!-- カテゴリ -->
@@ -178,7 +313,7 @@
 								<!-- セレクトボックス -->
 								<div class="col-md-7">
 									<div th:if="${#fields.hasErrors('category')}" class="text-danger small mb-2" th:errors="*{category}"></div> 
-									<select th:field="*{category}" class="form-control form-select">  
+									<select th:field="*{category}" class="form-control form-select nagoyameshi-select" required>  
 	        							<option value="">カテゴリを選択してください</option>
 	        							<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
 									</select>
@@ -216,5 +351,6 @@
 		
 		<div th:replace="~{fragment :: scripts}"></div>
 		<script th:src="@{/js/preview.js}"></script>
+<!--		<script th:src="@{/js/input-time-limit}"></script>-->
 	</body>
 </html>

@@ -1,4 +1,4 @@
-package com.example.nagoyameshi.security;
+	package com.example.nagoyameshi.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -19,7 +19,7 @@ public class WebSecurityConfig {
 	SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
 		http
 			.authorizeHttpRequests((requests) -> requests
-				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/restaurants", "/restaurants/{id}", "/restaurants/{id}/reviews", "/stripe/webhook").permitAll() // 全てのユーザーにアクセスを許可するURL
+				.requestMatchers("/css/**", "/images/**", "/js/**", "/storage/**", "/", "/signup/**", "/forgot-password", "/restaurants", "/restaurants/{id}", "/restaurants/{id}/reviews", "/stripe/webhook").permitAll() // 全てのユーザーにアクセスを許可するURL
 				.requestMatchers("/admin/**").hasRole("ADMIN") // 管理者にのみアクセスを許可するURL
 //				.requestMatchers("/**/reviews/post", "/**/reviews/edit", "/favorites", "/reservations").hasRole("ROLE_GENERAL_PREMIUM")
 				.anyRequest().authenticated() // 上記以外のURLはログインが必要（会員または管理者のどちらでもOK）

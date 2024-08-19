@@ -9,7 +9,17 @@
 	--main-color: #E0C1A1;
 	--point-color: #8A5B58;
 	--pale-color: #F2E2CE;
+	--form-empty-color: #6C757D;
+	--form-input-color: #000000;
 }
+
+/*input::placeholder {*/
+/*	color: var(--form-empty-color);*/
+/*}*/
+input[type="file"] {
+  color: var(--form-empty-color);
+}
+
 html {
 	font-size: 16px;
 }
@@ -239,11 +249,13 @@ a:hover {
 .nagoyameshi-form-inline {
 	display: inline-flex;
 	align-items: center;
+	width: 100%;
 }
 
 .form-between {
 	margin: 0 8px;
 }
+
 /* -------------------------------------------
 	フォーム関係ここまで↑
 ------------------------------------------- */
@@ -681,6 +693,18 @@ a:hover {
 	margin-bottom: 24px !important; /*bootstrapの上書き*/
 }
 
+.nagoyameshi-select option:first-child {
+	color: var(--form-empty-color);
+}
+
+.nagoyameshi-select:invalid {
+	color: var(--form-empty-color);
+}
+
+.nagoyameshi-select option {
+	color: var(--form-input-color);
+}
+
 /* ===========================================
  * ===========================================
    （管理者用）ユーザー・店舗一覧ページここまで↑	
@@ -699,10 +723,6 @@ a:hover {
 	flex-direction: column;
 	justify-content: center;
 	align-items: center;
-}
-
-.nagoyameshi-chart {
-	
 }
 
 /* ===========================================

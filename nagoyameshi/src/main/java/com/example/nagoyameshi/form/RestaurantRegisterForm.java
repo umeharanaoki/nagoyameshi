@@ -26,17 +26,16 @@ public class RestaurantRegisterForm {
 	@NotBlank(message = "電話番号を入力してください。")
 	private String phoneNumber;
 	
-	// LocalTime型に合わせたValidationが必要
-	// @NotBlank(message = "営業開始時間を入力してください。")
+	@NotNull(message = "営業開始時間を選択してください。")
 	private LocalTime openingTime;
 	    
-	// @NotBlank(message = "営業終了時間を入力してください。")
+	@NotNull(message = "営業終了時間を選択してください。")
 	private LocalTime closingTime;
 	
-	@NotNull(message = "予算の下限を入力してください。")
+	@NotNull(message = "予算の下限を選択してください。")
 	private Integer minBudget;
 	
-	@NotNull(message = "予算の上限を入力してください。")
+	@NotNull(message = "予算の上限を選択してください。")
 	private Integer maxBudget;
 	    
 	@NotBlank(message = "店の説明を入力してください。")

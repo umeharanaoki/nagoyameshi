@@ -14,24 +14,22 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.example.nagoyameshi.entity.User;
 import com.example.nagoyameshi.form.UserEditForm;
-import com.example.nagoyameshi.repository.UserRepository;
+import com.example.nagoyameshi.form.UserPasswordForm;
 import com.example.nagoyameshi.security.UserDetailsImpl;
 import com.example.nagoyameshi.service.UserService;
 
 @Controller
 @RequestMapping("/user")
 public class UserController {
-	private final UserRepository userRepository;
 	private final UserService userService;
 	
-	public UserController(UserRepository userRepository, UserService userService) {
-		this.userRepository = userRepository;
+	public UserController(UserService userService) {
 		this.userService = userService;
 	}
 	
 	@GetMapping
 	public String index(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
-		User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
+		User user = userDetailsImpl.getUser();
 		
 		model.addAttribute("user", user);
 		
@@ -40,7 +38,7 @@ public class UserController {
 	
 	@GetMapping("/edit")
 	public String edit(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
-		User user = userRepository.getReferenceById(userDetailsImpl.getUser().getId());
+		User user = userDetailsImpl.getUser();
 		UserEditForm userEditForm = new UserEditForm(user.getId(), user.getName(), user.getFurigana(), user.getPostalCode(), user.getAddress(), user.getPhoneNumber(), user.getBirthday(), user.getEmail());
 		model.addAttribute("userEditForm", userEditForm);
 		return "user/edit";
@@ -62,5 +60,44 @@ public class UserController {
         redirectAttributes.addFlashAttribute("successMessage", "会員情報を編集しました。");
         
         return "redirect:/user";
-    }    
+    }
+	
+	@GetMapping("/change-pass")
+	public String changePass(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl, Model model) {
+		User user = userDetailsImpl.getUser();
+		UserPasswordForm userPasswordForm = new UserPasswordForm();
+		
+		model.addAttribute("user", user);
+		model.addAttribute("userPasswordForm", userPasswordForm);
+		
+		return "user/change-pass";
+	}
+	
+	@PostMapping("/update-pass")
+	public String updatePass(@AuthenticationPrincipal UserDetailsImpl userDetailsImpl,
+							 @ModelAttribute @Validated UserPasswordForm userPasswordForm,
+							 BindingResult bindingResult,
+							 RedirectAttributes redirectAttributes) {
+		User user = userDetailsImpl.getUser();
+		
+		// 入力されたパスワードが古いパスワードに一致しなければエラーを表示
+		if (!userService.isSamePasswordEncode(userPasswordForm.getOldPassword(), user.getPassword())) {
+			System.out.println(userPasswordForm.getOldPassword());
+			System.out.println(user.getPassword());
+            FieldError fieldError = new FieldError(bindingResult.getObjectName(), "oldPassword", "元のパスワードが間違っています。");
+            bindingResult.addError(fieldError);
+        }
+		// 新しいパスワードと新しいパスワード（確認用）の入力値が一致しなければ、BindingResultオブジェクトにエラー内容を追加する
+        if (!userService.isSamePassword(userPasswordForm.getNewPassword(), userPasswordForm.getNewPasswordConfirmation())) {
+            FieldError fieldError = new FieldError(bindingResult.getObjectName(), "newPassword", "新しいパスワードが一致しません。");
+            bindingResult.addError(fieldError);
+            System.out.println(userPasswordForm.getNewPassword());
+            System.out.println(userPasswordForm.getNewPasswordConfirmation());
+        }
+        
+        userService.updatePass(user, userPasswordForm);
+        redirectAttributes.addFlashAttribute("successMessage", "パスワードを変更しました。");
+        
+        return "redirect:/user";
+	}
 }

@@ -73,6 +73,7 @@ public class RestaurantService {
     }
 	
 	// データベースに保存されている店舗情報を更新する処理
+	@Transactional
 	public void update(RestaurantEditForm restaurantEditForm) {
 		Restaurant restaurant = restaurantRepository.getReferenceById(restaurantEditForm.getId());
 		MultipartFile imageFile = restaurantEditForm.getImageFile();
@@ -137,7 +138,6 @@ public class RestaurantService {
 		} else if("evaluationDesc".equals(order)) {
 			// 評価順
 			restaurantPage = customRestaurantRepositoryImpl.findRestaurantsByCriteriaOrderByAverageEvaluation(keyword, minBudget, maxBudget, category, pageable);
-			System.out.println(pageable);
 		} else {
 			sort = Sort.by("createdAt").descending();
 			pageable = PageRequest.of(pageable.getPageNumber(), pageable.getPageSize(), sort);
