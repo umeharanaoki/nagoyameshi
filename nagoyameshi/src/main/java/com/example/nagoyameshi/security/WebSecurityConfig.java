@@ -25,22 +25,12 @@ public class WebSecurityConfig {
 				.anyRequest().authenticated() // 上記以外のURLはログインが必要（会員または管理者のどちらでもOK）
 			)
 			.formLogin((form) -> form
-			    .loginPage("/login")
-			    .loginProcessingUrl("/login")
-			    .successHandler((request, response, authentication) -> {
-			        // カスタムロジックを追加してリダイレクト先を決定
-			        response.sendRedirect("/?loggedIn");
-			    })
-			    .failureUrl("/login?error")
-			    .permitAll()
+				.loginPage("/login")			 // ログインページのURL
+				.loginProcessingUrl("/login")	 // ログインフォームの送信先URL
+				.defaultSuccessUrl("/?loggedIn") // ログイン成功時のリダイレクト先URL
+				.failureUrl("/login?error")		 // ログイン失敗時のリダイレクト先URL
+				.permitAll()
 			)
-//			.formLogin((form) -> form
-//				.loginPage("/login")			 // ログインページのURL
-//				.loginProcessingUrl("/login")	 // ログインフォームの送信先URL
-//				.defaultSuccessUrl("/?loggedIn") // ログイン成功時のリダイレクト先URL
-//				.failureUrl("/login?error")		 // ログイン失敗時のリダイレクト先URL
-//				.permitAll()
-//			)
 			.logout((logout) -> logout
 				.logoutSuccessUrl("/?loggedOut") // ログアウト時のリダイレクト先URL
 				.permitAll()
