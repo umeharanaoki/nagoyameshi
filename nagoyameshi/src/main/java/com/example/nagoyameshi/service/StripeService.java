@@ -65,7 +65,8 @@ public class StripeService {
 						.build()
 				)
 				.setMode(SessionCreateParams.Mode.SUBSCRIPTION)  // 支払方法をサブスクリプションに指定
-				.setSuccessUrl(requestURL + "/premium-redirect")  // プレミアムプラン紹介ページからトップページにリダイレクト
+				.setSuccessUrl(requestURL.replaceAll("/premium", ""))
+//				.setSuccessUrl(requestURL + "/premium-redirect")  // プレミアムプラン紹介ページからトップページにリダイレクト
 				.setCancelUrl(requestURL)  // リクエストURL（プレミアム紹介ページ）に戻す
 				.setClientReferenceId(userId.toString())
 			.build();

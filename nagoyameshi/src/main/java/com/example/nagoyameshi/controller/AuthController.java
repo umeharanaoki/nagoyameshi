@@ -106,6 +106,14 @@ public class AuthController {
 		return "auth/premium";
 	}
 	
+	@GetMapping("/premium/premium-logout")
+	public String redirectLogout(Model model) {
+		
+		model.addAttribute("successMessage", "プレミアムプランに加入しました。再度ログインしてください。");
+		
+		return "logout";
+	}
+
 	@GetMapping("/premium/premium-redirect")
 	public String redirect(Model model) {
 		

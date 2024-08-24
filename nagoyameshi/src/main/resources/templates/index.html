@@ -114,5 +114,19 @@
 			<div th:replace="~{fragment :: footer}"></div>	
 		</div>
 		<div th:replace="~{fragment :: scripts}"></div>
+		<script>
+			// JavaScriptを使った例
+			window.onload = function() {
+			  // ログアウト処理を実行
+			  fetch('/logout', { method: 'POST' })
+			    .then(response => {
+			      if (response.ok) {
+			        // ログアウト成功後、指定したURLにリダイレクト
+			        window.location.href = '/premium-redirect'; // 例: ありがとうページへリダイレクト
+			      }
+			    })
+			    .catch(error => console.error('ログアウトエラー:', error));
+			};
+		</script>
 	</body>
 </html>
