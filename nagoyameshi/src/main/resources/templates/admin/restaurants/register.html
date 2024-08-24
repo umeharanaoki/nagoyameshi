@@ -115,7 +115,7 @@
 									<div th:if="${#fields.hasErrors('openingTime')}" class="text-danger small mb-2" th:errors="*{openingTime}"></div> 
 									<div th:if="${#fields.hasErrors('closingTime')}" class="text-danger small mb-2" th:errors="*{closingTime}"></div> 
 									<div class="nagoyameshi-form-inline">
-										<select class="form-control form-select nagoyameshi-select" th:field="*{openingTime}" required>
+										<select class="form-control form-select nagoyameshi-select nagoyameshi-select-color" th:field="*{openingTime}">
 											<option value="">開始時刻</option>
 						                    <!-- 30分刻みの時間を追加 -->
 						                    <option value="00:00">00:00</option>
@@ -168,7 +168,7 @@
 						                    <option value="23:30">23:30</option>
 						                </select>
 										<span class="form-between">～</span>
-										<select class="form-control form-select nagoyameshi-select" th:field="*{closingTime}" required>
+										<select class="form-control form-select nagoyameshi-select nagoyameshi-select-color" th:field="*{closingTime}">
 											<option value="">終了時刻</option>
 						                    <!-- 30分刻みの時間を追加 -->
 						                    <option value="00:00">00:00</option>
@@ -238,7 +238,7 @@
 									<div th:if="${#fields.hasErrors('minBudget')}" class="text-danger small mb-2" th:errors="*{minBudget}"></div>
 									<div th:if="${#fields.hasErrors('maxBudget')}" class="text-danger small mb-2" th:errors="*{maxBudget}"></div>
 									<div class="nagoyameshi-form-inline">
-										<select class="form-control form-select nagoyameshi-select flex-grow-1" th:field="*{minBudget}" required>
+										<select class="form-control form-select nagoyameshi-select nagoyameshi-select-color flex-grow-1" th:field="*{minBudget}">
 											<option value="">下限を選択</option>
 											<option value="1000">&yen;1,000</option>
 											<option value="2000">&yen;2,000</option>
@@ -255,7 +255,7 @@
 											<option value="100000">&yen;100,000</option>
 										</select>
 										<span class="form-between">～</span>
-										<select class="form-control form-select nagoyameshi-select flex-grow-1" th:field="*{maxBudget}" required>
+										<select class="form-control form-select nagoyameshi-select nagoyameshi-select-color flex-grow-1" th:field="*{maxBudget}">
 											<option value="">上限を選択</option>
 											<option value="1000">&yen;1,000</option>
 											<option value="2000">&yen;2,000</option>
@@ -313,7 +313,7 @@
 								<!-- セレクトボックス -->
 								<div class="col-md-7">
 									<div th:if="${#fields.hasErrors('category')}" class="text-danger small mb-2" th:errors="*{category}"></div> 
-									<select th:field="*{category}" class="form-control form-select nagoyameshi-select" required>  
+									<select th:field="*{category}" class="form-control form-select nagoyameshi-select nagoyameshi-select-color">  
 	        							<option value="">カテゴリを選択してください</option>
 	        							<option th:each="category : ${categories}" th:value="${category.id}" th:text="${category.name}"></option>
 									</select>
@@ -351,6 +351,6 @@
 		
 		<div th:replace="~{fragment :: scripts}"></div>
 		<script th:src="@{/js/preview.js}"></script>
-<!--		<script th:src="@{/js/input-time-limit}"></script>-->
+		<script th:src="@{/js/select-color.js}"></script>
 	</body>
 </html>

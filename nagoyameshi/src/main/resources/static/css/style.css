@@ -693,17 +693,21 @@ a:hover {
 	margin-bottom: 24px !important; /*bootstrapの上書き*/
 }
 
-.nagoyameshi-select option:first-child {
-	color: var(--form-empty-color);
+/*.nagoyameshi-select option:first-child {*/
+/*	color: var(--form-empty-color);*/
+/*}*/
+
+.nagoyameshi-select-color {
+    color: var(--form-empty-color);
 }
 
-.nagoyameshi-select:invalid {
-	color: var(--form-empty-color);
-}
+/*.nagoyameshi-select:invalid {*/
+/*	color: var(--form-empty-color);*/
+/*}*/
 
-.nagoyameshi-select option {
-	color: var(--form-input-color);
-}
+/*.nagoyameshi-select option {*/
+/*	color: var(--form-input-color);*/
+/*}*/
 
 /* ===========================================
  * ===========================================
