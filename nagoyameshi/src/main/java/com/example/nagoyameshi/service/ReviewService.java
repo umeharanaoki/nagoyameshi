@@ -47,6 +47,7 @@ public class ReviewService {
         review.setEvaluation(reviewPostForm.getEvaluation());
         review.setComment(reviewPostForm.getComment());
         
+        System.out.println("test");       
         reviewRepository.save(review);
     }
 	

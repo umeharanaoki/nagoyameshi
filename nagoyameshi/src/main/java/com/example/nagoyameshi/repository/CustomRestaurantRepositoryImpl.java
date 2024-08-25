@@ -67,8 +67,14 @@ public class CustomRestaurantRepositoryImpl implements CustomRestaurantRepositor
 	    
 	    List<Object[]> results = query.getResultList();
 	    List<Restaurant> restaurants = results.stream()
-	        .map(result -> (Restaurant) result[0])
-	        .collect(Collectors.toList());
+	    	    .map(result -> {
+	    	        if (!(result[0] instanceof Restaurant)) {
+	    	            throw new ClassCastException("Expected Restaurant, but found " + result[0].getClass().getName());
+	    	        }
+	    	        return (Restaurant) result[0];
+	    	    })
+	    	    .collect(Collectors.toList());
+
 	    
 	    return new PageImpl<>(restaurants, pageable, totalRows);
 	}
