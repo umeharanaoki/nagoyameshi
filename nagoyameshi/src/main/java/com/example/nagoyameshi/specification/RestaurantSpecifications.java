@@ -43,7 +43,7 @@ public class RestaurantSpecifications {
 	// 最高予算が上限より下か
 	public static Specification<Restaurant> maxBudgetLessThanEqual(Integer maxBudget) {
 		return maxBudget == null ? null : (root, query, cb) -> {
-			return cb.lessThanOrEqualTo(root.get("minBudget"), maxBudget);
+			return cb.lessThanOrEqualTo(root.get("maxBudget"), maxBudget);
 		};
 	}
 	
